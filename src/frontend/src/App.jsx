@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
+import Home from './pages/Home';
+import App2 from './pages/App2';
+
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark', // Change to "dark" for dark mode
+    primary: {
+      main: '#1976d2', // MUI blue
+    },
+    secondary: {
+      main: '#dc004e', // MUI pink
+    },
+    background: {
+      default: '#000000',
+    },
+  },
+});
+
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]); // Runs every time the route changes
+
+  return null;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <ScrollToTop /> {/* Always scroll to top on route change */}
+        {/* <Navbar /> */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/app2" element={<App2 />} />
+        </Routes>
+        {/* <Footer /> */}
+      </Router>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
