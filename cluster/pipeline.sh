@@ -3,11 +3,10 @@
 HOSTNAME="k3d-local-registry"
 IP="127.0.0.1"
 HOSTS_FILE="/etc/hosts"
-CLIENT_IMAGE="client:latest"
+FRONTEND_IMAGE="frontend:latest"
 BACKEND_IMAGE="backend:latest"
 REGISTRY="k3d-local-registry:5001"
 CLUSTER_NAME="cc25-cluster"
-
 
 start_cluster() {
     if ! command -v k3d &> /dev/null
@@ -62,43 +61,39 @@ start_cluster() {
     fi
 
     # Build frontend
-    # if [[ "$(docker images -q $CLIENT_IMAGE 2> /dev/null)" == "" ]]; then
-    #     cd ../client
-    #     docker build -t $CLIENT_IMAGE .
-    #     cd ../cluster
-    # fi
+    if [[ "$(docker images -q $FRONTEND_IMAGE 2> /dev/null)" == "" ]]; then
+        cd ../src/frontend
+        docker build -t $FRONTEND_IMAGE .
+        cd ../../cluster
+    fi
 
     # Build backend
     # if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
-    #     cd ../backend
+    #     cd ../src/backend
     #     docker build -t $BACKEND_IMAGE .
-    #     cd ../dummy
+    #     cd ../../cluster
     # fi
 
-    # Tag and push the Docker images to the local registry
-    # docker tag $CLIENT_IMAGE $REGISTRY/$CLIENT_IMAGE
+    docker tag $FRONTEND_IMAGE $REGISTRY/$FRONTEND_IMAGE
     # docker tag $BACKEND_IMAGE $REGISTRY/$BACKEND_IMAGE
 
-    # docker push $REGISTRY/$CLIENT_IMAGE
+    docker push $REGISTRY/$FRONTEND_IMAGE
     # docker push $REGISTRY/$BACKEND_IMAGE
 
     kubectl apply -f ingress.yaml
-    # kubectl apply -f client_deployment.yaml
-    # kubectl apply -f client_service.yaml
-    # kubectl apply -f backend_deployment.yaml
-    # kubectl apply -f backend_service.yaml
+    kubectl apply -f deployment-frontend.yaml
+    kubectl apply -f service-frontend.yaml
+    # kubectl apply -f deployment-backend.yaml
+    # kubectl apply -f service-backend.yaml
 }
 
-# Function to stop the k3d cluster
 stop_cluster() {
     k3d cluster delete $CLUSTER_NAME
 }
 
-# Check if the user passed "stop" as a parameter
 if [ "$1" == "stop" ]; then
     stop_cluster
     exit 0
 fi
 
-# Start the k3d cluster
 start_cluster
