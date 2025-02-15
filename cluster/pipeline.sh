@@ -46,9 +46,8 @@ start_cluster() {
 
     k3d cluster create $CLUSTER_NAME \
         --api-port 6550 \
-        -p "8081:8081@loadbalancer" \
-        -p "8082:8082@loadbalancer" \
-        --agents 2 \
+        -p "8084:8084@loadbalancer" \
+        --agents 1 \
         --registry-use $REGISTRY
 
     # Check if the cluster is running
