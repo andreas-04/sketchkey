@@ -7,6 +7,9 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -23,21 +26,42 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#ff5722", // Change this to your desired primary color
+    },
+    secondary: {
+      main: "#4caf50", // Change this to your desired secondary color
+    },
+    background: {
+      default: "#aaaaaa", // Change this to your desired background color
+    },
+    text: {
+      primary: "#212121", // Change this to your desired primary text color
+      secondary: "#757575", // Change this to your desired secondary text color
+    },
+  },
+});
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <html lang="en">
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </html>
+    </ThemeProvider>
   );
 }
 
