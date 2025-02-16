@@ -59,9 +59,9 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         {/* Navbar for Desktop */}
         <AppBar position="static" sx={{ backgroundColor: '#c45555', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <IconButton>
-                    <MenuIcon onClick={handleDrawer} />
-                </IconButton>
+                {/* <IconButton> */}
+                    {/* <MenuIcon onClick={handleDrawer} /> */}
+                {/* </IconButton> */}
                 <Box sx={{ width: '10%', display: 'flex', justifyContent: 'center', mb: 1 }}>
                 <Button 
                 onClick={onLogoClick} 
