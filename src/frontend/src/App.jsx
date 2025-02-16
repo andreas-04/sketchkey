@@ -48,7 +48,7 @@ function App() {
         <ScrollToTop /> 
         <Routes>
           {navLinks.map((link) => (
-            <Route key={link.title} path={link.path} element={link.element} />
+            <Route theme = {themes ? theme[0] : theme[1] } themeToggle={handleThemeChange} key={link.title} path={link.path} element={link.element} />
           ))}
           
         </Routes>

@@ -2,7 +2,7 @@ import React, { useState } from 'react'; // Add useState here
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-function Login () {
+function Login ({themes, themeToggle}) {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = useState('');
@@ -10,6 +10,7 @@ function Login () {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
+        console.clear();
         try {
             const response = await fetch('http://localhost:8000/users/login/', {
                 method: 'POST',
