@@ -28,6 +28,7 @@ function Login () {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
                 responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
+                location.replace(location.href)
                 navigate('/canvas');
             } else {
                 throw new Error('Login failed.');
