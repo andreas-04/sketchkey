@@ -148,9 +148,78 @@ const Canvas = ({ themes }) => {
         handledDialogOpen()
 
     };
+    // const saveDrawing = () => {
+    //     const canvas = canvasRef.toDataURL('image/png');
+    //     const name = `drawing_${Date.now()}.png`;
+    // }
+    const [id, setId] = useState('');
+    const [error, setError] = useState('');
 
+    const getPrompt = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id,
+                }),
+            });
+     
+            if (response.ok) {
+                const responseData = await response.json();
+                setError(responseData.prompt);
+                
+            } else {
+                throw new Error('Prompt failed to load.');
+            }
+        } catch (err) {
+            setError('Prompt failed to load.');
+            console.error(err);
+        }
+    };
+
+
+    const saveDrawing = async (e) => {
+        e.preventDefault();
+        setError("");
+        console.clear();
+        try {
+            const response = await fetch('http://localhost:8000/users/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                responseData.message ? setError(responseData.message): setError(responseData.error);
+                responseData.message ? console.log(responseData.message) : console.log(responseData.error);
+            
+            } else {
+                throw new Error('Submission failed.');
+            }
+        } catch (err) {
+            setError('Submission failed.');
+            console.error(err);
+        }
+    };
+    
     return (
-        <div className='flex flex-col items-center '>
+        <div className='flex flex-col items-center min-h-screen pt-6'>
+            <div className='grid grid-cols-2 gap-4 justify-center items-center'>
+
+            <Button variant="contained" color="primary" onClick={getPrompt} style={{ marginTop: '' }}>
+                Get Prompt
+            </Button>
+            <p>{error}</p>
+            </div>
             {/* Color selection buttons */}
             <div className='grid grid-cols-12 pb-2 pl-2' style={{ position: '', marginLeft: 'auto', marginRight: 'auto', width: '100%', left: '', top: '0' }}>
                 {colors.map((color) => (
@@ -190,23 +259,13 @@ const Canvas = ({ themes }) => {
 
 
         {/* Side action buttons */}
-        <div className='flex flex-col mx-auto'>
-
-            {/* Brush size slider */}
-            <div>
-                <Slider
-                    value={brushSize}
-                    onChange={handleBrushChange}
-                    aria-labelledby="brush-size-slider"
-                    valueLabelDisplay="auto"
-                    min={1}
-                    max={10}
-                />
-            </div>
-
+        <div className='flex flex-col mx-auto grid grid-cols-2 gap-4'>
             {/* Download button */}
             <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '10px' }}>
                 Download Image
+            </Button>
+            <Button variant="contained" color="primary" onClick={saveDrawing} style={{ marginTop: '10px' }}>
+                Submit Image
             </Button>
             <ComparisonView open = {CompareDialog} handleClose={handleDialogClose}/>
             </div>
