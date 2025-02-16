@@ -44,8 +44,15 @@ const Navbar = ({ themes, themeToggle}) => {
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div className='hidden md:flex'>
-                <Button sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }} onClick={onLogoClick}>    <Box sx={{ width: '100%', display: 'flex', justifyContent: '', mb: 1 }}>
-                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
+                <Button sx={{ width: '10%', display: 'flex', justifyContent: 'center', mb: 0.5 }} onClick={onLogoClick}>    
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '100%', height: 'auto' }} />
+                </Box></Button>
+                </div>
+                <div className=' md:hidden'>
+                <Button sx={{ width: '12%', display: 'flex', justifyContent: '', mb: 1 }} onClick={onLogoClick}>    
+                <Box sx={{ width: '250%', display: 'flex', justifyContent: '', mb: 1 }}>
+                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '250%', height: 'auto' }} />
                 </Box></Button>
                 </div>
 
