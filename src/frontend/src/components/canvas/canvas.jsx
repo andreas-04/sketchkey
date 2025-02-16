@@ -375,7 +375,7 @@ const Canvas = ({ themes, themeToggle }) => {
                     onMouseDown={() => setDrawing(true)}
                     onMouseUp={stopDrawing}
                     onMouseMove={draw}
-                    style={{ border: '1px solid blue', marginLeft: 'auto', marginRight: 'auto', maxHeight: '', maxWidth: '' }}
+                    style={{ border: '1px solid black', marginLeft: 'auto', marginRight: 'auto', maxHeight: '', maxWidth: '' }}
                     
                 />
                 </div>
