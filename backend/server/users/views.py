@@ -8,7 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from .serializers import UserRegistrationSerializer, LoginSerializer
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import AllowAny
+from django.contrib.auth import logout
 # Create your views here.
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -17,37 +18,61 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 class UserRegistrationView(APIView):
-    @csrf_exempt
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {"message": "User registered successfully."},
-                status=status.HTTP_201_CREATED
-            )
+            user = serializer.save()
+            
+            # Auto-login after registration
+            from django.contrib.auth import login
+            login(request, user)
+            
+            token = Token.objects.create(user=user)
+            
+            return Response({
+                "message": "User registered successfully.",
+                "token": token.key,
+                "sessionid": request.session.session_key
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
 
-            # Authenticate the user
             user = authenticate(request, username=username, password=password)
 
             if user:
-                # Get or create a token for the user
+                # For browser sessions
+                from django.contrib.auth import login
+                login(request, user)
+                
+                # For API token authentication
                 token, created = Token.objects.get_or_create(user=user)
+                
                 return Response({
                     'message': 'Login successful',
                     'token': token.key,
+                    'sessionid': request.session.session_key
                 }, status=status.HTTP_200_OK)
-            else:
-                return Response(
-                    {'error': 'Invalid credentials'},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
+            return Response(
+                {'error': 'Invalid credentials'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LogoutView(APIView):
+    def post(self, request):
+        # Delete the token
+        request.user.auth_token.delete()
+        
+        # Clear session
+        logout(request)
+        
+        return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
