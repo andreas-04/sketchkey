@@ -46,7 +46,7 @@ function Rank() {
 
   return (
     <>
-      <div className='top-div flex items-center justify-center'>
+      <div className='top-div flex pt-12 min-h-screen'>
           <div className='max-w[1000px] mx-auto'>
             <Typography variant="h4" component="h1" gutterBottom align="center">
               Ranking
