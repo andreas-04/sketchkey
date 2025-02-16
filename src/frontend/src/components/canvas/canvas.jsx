@@ -9,6 +9,20 @@ const Canvas = () => {
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const handleResize = () => {
+            canvas.width = window.innerWidth / 2;
+            canvas.height = window.innerHeight / 1.5;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+
     }, []);
 
     const draw = (e) => {
@@ -25,8 +39,8 @@ const Canvas = () => {
     return (
         <canvas
             ref={canvasRef}
-            width={800}
-            height={600}
+            width={window.innerWidth / 2}
+            height={window.innerHeight / 1.5}
             onMouseDown={() => setDrawing(true)}
             onMouseUp={() => setDrawing(false)}
             onMouseMove={draw}
