@@ -68,9 +68,9 @@ start_cluster() {
 
     # Build backend
     if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
-        cd ../src/backend
+        cd ../backend
         docker build -t $BACKEND_IMAGE .
-        cd ../../cluster
+        cd ../cluster
     fi
 
     docker tag $FRONTEND_IMAGE $REGISTRY/$FRONTEND_IMAGE
