@@ -17,7 +17,7 @@ const Navbar = ({themes, themeToggle, navLinks}) => {
     return (
         <>
         {/* Navbar for Desktop */}
-        <AppBar position ="static" sx={{ backgroundColor: '#c45555', 
+        <AppBar position ="static" color='primary' sx={{ backgroundColor: '', 
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar>
                 <IconButton>
@@ -48,9 +48,9 @@ const Navbar = ({themes, themeToggle, navLinks}) => {
                 <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
                     <Switch checked={themes} onChange={themeToggle} sx={{
                         '& .MuiSwitch-thumb': 
-                        { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary, },
+                        { backgroundColor: themes ? theme[0].palette.background.default : theme[1].palette.background.default, },
                         '& .MuiSwitch-track': {
-                        backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary,},
+                        backgroundColor: themes ? theme[0].palette.background.default: theme[1].palette.background.default,},
                         }} />
                 </div>
             </Toolbar>

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Button, Grid, Box, Slider} from '@mui/material';
+import { Button, Grid, Box, Slider, Switch} from '@mui/material';
 import theme from '../../themes/themes';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -13,7 +13,7 @@ const colors = [
         '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000'
 ];
 
-const Canvas = ({ themes }) => {
+const Canvas = ({ themes, themeToggle }) => {
     const [image, setImage] = useState(null);
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -26,6 +26,14 @@ const Canvas = ({ themes }) => {
     const [brushSize, setBrushSize] = useState(10); 
     var widthCanvas = window.innerWidth / 1.7;
     var heightCanvas = window.innerHeight / 1.5;
+
+    var currentTheme = themes ? theme[0] : theme[1];
+    useEffect(() => {
+        currentTheme = themes ? theme[0] : theme[1];
+        if (canvasRef.current) {
+            canvasRef.current.style.backgroundColor = currentTheme.palette.background.default;
+        }
+    }, [themes, themeToggle]);
 
     // fixes redo adding two drawings each time
     useEffect(() => {
@@ -42,7 +50,6 @@ const Canvas = ({ themes }) => {
             heightCanvas = window.innerHeight / 1.5;
             canvas.width = widthCanvas;
             canvas.height = heightCanvas;
-            const currentTheme = themes ? theme[0] : theme[1];
 
             // Set background color based on theme
             ctx.fillStyle = currentTheme.palette.background.default;
@@ -154,19 +161,35 @@ const Canvas = ({ themes }) => {
     //     const canvas = canvasRef.toDataURL('image/png');
     //     const name = `drawing_${Date.now()}.png`;
     // }
-    const [id, setId] = useState('');
     const [error, setError] = useState('');
 
+    function getCookie(name) {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split("=");
+            if (key === name) {
+                return decodeURIComponent(value);
+            }
+        }
+    };
+
+    const getSessionId = () => {
+        const sessionId = getCookie('sessionid');
+        return sessionId;
+    };
+
+    const sessionId = getSessionId();
+
     const getPrompt = async () => {
-        setId(5);
         try {
             const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id,
+                    sessionId,
                 }),
             });
      
@@ -185,11 +208,12 @@ const Canvas = ({ themes }) => {
 
 
     const saveDrawing = async (e) => {
+        setImage(canvasRef.current.toDataURL('image/png'));
         e.preventDefault();
         setError("");
         console.clear();
         try {
-            const response = await fetch('http://localhost:8000/users/login/', {
+            const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -217,7 +241,15 @@ const Canvas = ({ themes }) => {
         <div className='flex flex-col items-center min-h-screen pt-6'>
             <div className='grid grid-cols-2 gap-4 justify-center items-center'>
 
-            <Button variant="contained" color="primary" onClick={getPrompt} style={{ marginTop: '' }}>
+            <Button variant="contained"
+            // sx={{
+            //         backgroundColor: currentTheme.palette.background.default, // Dynamically set background color
+            //         marginTop: '', // Adjusted for spacing
+            //         '&:hover': {
+            //             backgroundColor: currentTheme.palette.text.secondary, // Darker shade on hover
+            //         },
+            //     }}
+                 color='primary' onClick={getPrompt} style={{ marginTop: '' }}>
                 Get Prompt
             </Button>
             <p>{error}</p>
