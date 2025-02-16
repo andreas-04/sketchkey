@@ -1,12 +1,14 @@
 import React, { useState } from 'react'; // Add useState here
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 function Register () {
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirm_password, setPasswordConfirm] = React.useState('');
+    const navigate = useNavigate(); // Initialize the useNavigate hook
 
     const [error, setError] = useState('');
     const handleRegister = async (e) => {
@@ -30,7 +32,7 @@ function Register () {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
                 responseData.message ? console.log(responseData.message) : console.log(responseData.error);
-                
+                navigate('/')
             } else {
                 throw new Error('Registration failed.');
             }
