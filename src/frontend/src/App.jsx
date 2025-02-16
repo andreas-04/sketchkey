@@ -23,12 +23,17 @@ const ScrollToTop = () => {
 };
 
 function App() {
-  const [themes, setThemes] = useState(false);
+  // const [themes, setThemes] = useState(false);
   const [user, setUser] = useState(null);
+  const [themes, setThemes] = useState(() => {
+    return localStorage.getItem('theme') === 'dark' ? true : false;
+  });
   // const navigate = useNavigate();
 
   const handleThemeChange = () => {
-    setThemes(!themes);
+    const newTheme = !themes;
+    setThemes(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   };
 
   const navLinks = [

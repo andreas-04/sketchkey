@@ -10,12 +10,17 @@ import Timeout from '../Timeout';
 
 import { useTheme } from '@mui/material/styles'; // Import to access theme
 
+
 const colors = [
-        '#FF5733', '#33FF57', '#3357FF', '#F33FFF', '#FFD700', '#800080', '#00FF00', '#00FFFF', '#FF1493',
-        '#4682B4', '#DC143C', '#00BFFF', '#FF4500', '#8A2BE2',
-         '#B0E0E6','#FF8C00', 
-        '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000', '#ffffff'
+    '#FF0000', '#FF4500', '#FF8C00', '#FFD700', '#FFFF00', // Reds Oranges and Yellows
+    '#ADFF2F', '#32CD32', '#008000', '#006400', '#00FA9A', // Greens
+    '#00FFFF', '#4682B4', '#5F9EA0', '#0000FF', '#00008B', // Cyans and Blues
+    '#8A2BE2', '#4B0082', '#800080', '#EE82EE', '#DA70D6', // Purples and Violets
+    '#F33FFF', '#FF1493', '#DC143C', '#B22222', '#A52A2A', // Pinks Crimsons and Browns
+    '#8B4513', '#D2691E', '#F0E68C', '#D8BFD8', '#FAFAD2', // Tans Beiges and Pastels
+    '#708090', '#2F4F4F', '#556B2F', '#000000', '#FFFFFF'  // Grays Darks and Neutrals
 ];
+
 function getCookie(name) {
     const cookies = document.cookie.split("; ");
     for (let cookie of cookies) {
