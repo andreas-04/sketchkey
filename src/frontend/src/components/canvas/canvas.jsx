@@ -150,6 +150,10 @@ const Canvas = ({ themes }) => {
         link.download = 'drawing.png'; 
         link.click(); // Trigger the download
     };
+    const saveDrawing = () => {
+        const canvas = canvasRef.toDataURL('image/png');
+        const name = `drawing_${Date.now()}.png`;
+    }
 
     return (
         <div className='flex flex-col items-center min-h-screen pt-6'>
