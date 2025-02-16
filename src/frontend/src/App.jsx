@@ -40,9 +40,9 @@ function App() {
   ];
 
   const appBarHeader = [
-    // { title: 'Canvas', path: '/canvas', element: <Home /> },
-    // { title: 'Gallery', path: '/gallery', element: <Gallery /> },
-    // { title: 'Rank', path: '/rank', element: <Rank /> },
+    { title: 'Canvas', path: '/canvas', element: <Home /> },
+    { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+    { title: 'Rank', path: '/rank', element: <Rank /> },
   ];
 
   useEffect(() => {
@@ -70,6 +70,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="*" element={<Login />} />
           </Routes>
         )}
