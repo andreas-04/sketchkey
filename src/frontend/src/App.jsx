@@ -41,6 +41,11 @@ function App() {
     { title: 'Rank', path: '/rank', element: <Rank /> },
 ];
 
+const appBarHeader = [
+  { title: 'Canvas', path: '/canvas', element: <Home /> },
+  { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+];
+
   return (
     <ThemeProvider theme={themes ? theme[0] : theme[1]}>
       <CssBaseline />
