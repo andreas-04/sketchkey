@@ -1,8 +1,7 @@
-# apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: client
+  name: frontend
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
@@ -13,9 +12,9 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: client
+            name: frontend
             port:
-              number: 8081
+              number: 8084
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -33,4 +32,4 @@ spec:
           service:
             name: backend
             port:
-              number: 8082
+              number: 8000
