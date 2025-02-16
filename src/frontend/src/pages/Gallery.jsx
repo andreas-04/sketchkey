@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Pagination, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#FFC733']; // Example colors
 const allImages = Array.from({ length: 30 }, (_, i) => ({
@@ -9,13 +10,10 @@ const allImages = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 const Gallery = () => {
+  const currentTheme = useTheme();
   const [selectedColor, setSelectedColor] = useState(null);
   const [colorPageMap, setColorPageMap] = useState({});
   const itemsPerPage = 9;
-
-  const handleColorChange = (color) => {
-    setSelectedColor(color === selectedColor ? null : color);
-  };
 
   const handlePageChange = (event, value) => {
     setColorPageMap((prev) => ({ ...prev, [selectedColor || 'all']: value }));
@@ -24,9 +22,6 @@ const Gallery = () => {
   const currentPage = colorPageMap[selectedColor || 'all'] || 1;
   
   const filteredImages =allImages;
-  // = selectedColor
-  //   ? allImages.filter((img) => img.color === selectedColor)
-  //   : allImages;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedImages = filteredImages.slice(startIndex, startIndex + itemsPerPage);
@@ -36,22 +31,7 @@ const Gallery = () => {
       {/* Color Picker */}
       <div className="max-w-[1000px] mx-auto mb-4">
         <Typography variant="h4" className="text-center mb-2">Gallery</Typography>
-        {/* <div className="flex justify-center gap-2">
-          {colors.map((color) => (
-            <Button
-              key={color}
-              style={{
-                backgroundColor: color,
-                width: '35px',
-                height: '35px',
-                minWidth: '35px',
-                borderRadius: '50%',
-                border: selectedColor === color ? '2px solid #000' : 'none'
-              }}
-              onClick={() => handleColorChange(color)}
-            />
-          ))}
-        </div> */}
+
       </div>
 
       {/* Gallery Grid */}
@@ -73,6 +53,9 @@ const Gallery = () => {
         page={currentPage}
         onChange={handlePageChange}
         className="mt-6"
+        sx={{
+          color: currentTheme.palette.button.default,
+          }}
       />
     </div>
   );

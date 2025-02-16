@@ -10,7 +10,6 @@ import Timeout from '../Timeout';
 
 import { useTheme } from '@mui/material/styles'; // Import to access theme
 
-
 const colors = [
     '#FF0000', '#FF4500', '#FF8C00', '#FFD700', '#FFFF00', // Reds Oranges and Yellows
     '#ADFF2F', '#32CD32', '#008000', '#006400', '#00FA9A', // Greens
