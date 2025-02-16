@@ -59,9 +59,9 @@ function Login ({themes, themeToggle}) {
         </Box>
             {/* <p className='text-2xl'>Login</p> */}
             <div className='flex-col flex gap-4'>
-            <TextField variant="standard" label="Username" 
+            <TextField variant="standard" label="Username" placeholder='admin'
                 value={username} onChange={(e) => setUsername(e.target.value)}/>
-            <TextField variant="standard" label="Password" type="password" 
+            <TextField variant="standard" label="Password" type="password" placeholder='password123'
                 value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
 
