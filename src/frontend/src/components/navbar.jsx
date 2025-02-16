@@ -29,6 +29,14 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         navigate("/register");
     };
 
+    const onSignOutClick = () => {
+        // delete the cookie
+    }
+
+    useEffect(() => {
+        // fetch the cookie here called auth
+    }, [])
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -78,7 +86,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                         <Typography sx={{ p: 2 }}>User Information Coming</Typography>
                         <Button onClick={onSignInClick}>Sign In</Button>
                         <Button onClick={onSignUpClick}>Sign Up</Button>
-                        <Button>Sign Out</Button>
+                        <Button onClick={onSignOutClick} >Sign Out</Button>
                     </Popover>
                 </div>  
             </Toolbar>
