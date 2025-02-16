@@ -48,10 +48,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         <AppBar position ="static" color='' sx={{ color: themes ? theme[1].palette.text.primary : theme[0].palette.text.primary, backgroundColor: themes ? theme[0].palette.button.default : theme[1].palette.button.default, 
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <IconButton>
-                    <MenuIcon onClick={handleDrawer} />
-                </IconButton>
-                <Box sx={{ width: '10%', display: 'flex', justifyContent: 'center', mb: 1 }}>
+                <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
                    <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
                 </Box>
                 <div className="hidden md:flex" >
