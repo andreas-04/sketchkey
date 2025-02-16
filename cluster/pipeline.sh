@@ -23,7 +23,6 @@ start_cluster() {
         k3d cluster delete $CLUSTER_NAME
     fi
 
-    # Check to see if the registry exists
     if k3d registry list | grep -q 'k3d-local-registry'
     then
         k3d registry delete k3d-local-registry
@@ -47,7 +46,8 @@ start_cluster() {
     k3d cluster create $CLUSTER_NAME \
         --api-port 6550 \
         -p "8084:8084@loadbalancer" \
-        --agents 1 \
+        -p "8000:8000@loadbalancer" \
+        --agents 2 \
         --registry-use $REGISTRY
 
     # Check if the cluster is running
@@ -67,23 +67,23 @@ start_cluster() {
     fi
 
     # Build backend
-    # if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
-    #     cd ../src/backend
-    #     docker build -t $BACKEND_IMAGE .
-    #     cd ../../cluster
-    # fi
+    if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
+        cd ../backend
+        docker build -t $BACKEND_IMAGE .
+        cd ../cluster
+    fi
 
     docker tag $FRONTEND_IMAGE $REGISTRY/$FRONTEND_IMAGE
-    # docker tag $BACKEND_IMAGE $REGISTRY/$BACKEND_IMAGE
+    docker tag $BACKEND_IMAGE $REGISTRY/$BACKEND_IMAGE
 
     docker push $REGISTRY/$FRONTEND_IMAGE
-    # docker push $REGISTRY/$BACKEND_IMAGE
+    docker push $REGISTRY/$BACKEND_IMAGE
 
     kubectl apply -f ingress.yaml
     kubectl apply -f deployment-frontend.yaml
     kubectl apply -f service-frontend.yaml
-    # kubectl apply -f deployment-backend.yaml
-    # kubectl apply -f service-backend.yaml
+    kubectl apply -f deployment-backend.yaml
+    kubectl apply -f service-backend.yaml
 }
 
 stop_cluster() {
