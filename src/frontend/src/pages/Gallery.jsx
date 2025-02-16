@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Pagination from '@mui/material/Pagination';
 
+import { useTheme } from '@mui/material/styles'; // Import to access theme
 
 function Gallery({themes, themeToggle}) {
 
