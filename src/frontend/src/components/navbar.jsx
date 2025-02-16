@@ -36,6 +36,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         Cookies.remove('auth');
         setUser(null);
         navigate("/");
+        location.replace(location.href)
     };
 
     useEffect(() => {
@@ -74,7 +75,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                     }} />
                 </div>
                 <div>
-                {user ? (
+
                     <>
                         <IconButton onClick={handleAvatarClick}>
                             <Avatar />
@@ -93,16 +94,10 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                                 horizontal: 'center',
                             }}
                         >
-                            <Typography sx={{ p: 2 }}>Hi!</Typography>
                             <Button onClick={onSignOutClick}>Sign Out</Button>
                         </Popover>
                             </>
-                        ) : (
-                            <>
-                                <Button onClick={onSignInClick}>Sign In</Button>
-                                <Button onClick={onSignUpClick}>Sign Up</Button>
-                         </>
-                )}
+                       
                 </div>  
             </Toolbar>
         </AppBar>

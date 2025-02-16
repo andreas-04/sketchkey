@@ -9,6 +9,10 @@ function Login ({themes, themeToggle}) {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    const handleSignUp = () => {
+        navigate("/register")
+    }
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
@@ -29,8 +33,10 @@ function Login ({themes, themeToggle}) {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
                 responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
+
+                navigate('/rank');
+
                 location.replace(location.href)
-                navigate('/canvas');
             } else {
                 throw new Error('Login failed.');
             }
@@ -45,6 +51,7 @@ function Login ({themes, themeToggle}) {
     return (
         <>
         <div className='min-h-screen flex items-center justify-center flex flex-col gap-4'>
+        <h1>SketchKey</h1>
             <p className='text-2xl'>Login</p>
             <div className='flex-col flex gap-4'>
             <TextField variant="standard" label="Username" 
@@ -54,6 +61,7 @@ function Login ({themes, themeToggle}) {
             </div>
 
             <Button sx={{paddingTop: ''}} variant="outlined" onClick={handleLogin}>Login</Button>
+            <Button sx={{paddingTop: ''}} variant="outlined" onClick={handleSignUp}>Sign Up</Button>
             <p className=''>{error}</p>
         </div>
         </>
