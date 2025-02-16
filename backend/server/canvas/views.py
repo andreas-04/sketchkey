@@ -8,7 +8,9 @@ from rest_framework.decorators import action
 from .services import ELOService
 from django.db.models import Q
 from rest_framework.views import APIView
-
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 class DailyPuzzleViewSet(viewsets.ModelViewSet):
     queryset = DailyPuzzle.objects.all()
     serializer_class = DailyPuzzleSerializer
@@ -129,3 +131,18 @@ class LeaderboardView(APIView):
             .order_by('-elo_rating')[:100]\
             .values('id', 'user__username', 'elo_rating')
         return Response(leaderboard)
+    
+
+@csrf_exempt
+def update_daily_puzzle(request, puzzle_id):
+    if request.method == "PUT":
+        puzzle = get_object_or_404(DailyPuzzle, id=puzzle_id)
+
+        if "canvas" in request.FILES:
+            puzzle.canvas = request.FILES["canvas"]  # Update image file
+
+
+        puzzle.save()
+        return JsonResponse({"message": "DailyPuzzle updated successfully", "file_url": puzzle.canvas.url})
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

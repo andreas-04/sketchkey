@@ -8,6 +8,10 @@ class DailyPuzzleSerializer(serializers.ModelSerializer):
         model = DailyPuzzle
         fields = ['id', 'user', 'canvas', 'prompt', 'date']
         read_only_fields = ['prompt', 'date']  
+        extra_kwargs = {
+            'user': {'required': False, 'allow_null': True},  # ✅ Make user optional
+            'date': {'required': False, 'allow_null': True},  # ✅ Make date optional
+        }
 
     def validate(self, data):
         if 'user' not in data:

@@ -272,64 +272,41 @@ const Canvas = ({ themes, themeToggle }) => {
         return sessionId;
     };
 
-
-    const getPrompt = async () => {
-        const sessionId = getSessionId();
-        try {
-            const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    sessionId,
-                }),
-            });
-     
-            if (response.ok) {
-                const responseData = await response.json();
-                setError(responseData.prompt);
-                
-            } else {
-                throw new Error('Prompt failed to load.');
+    const saveDrawing = async () => {
+        const uid = getCookie("uid");
+        const date = new Date();
+        const formattedDate = date.toLocaleDateString('en-CA');
+        const canvas = canvasRef.current;
+        canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append("canvas", blob, `${uid}-${formattedDate}.png`); 
+            formData.append("date", formattedDate);
+            formData.append("user", uid);
+            try{
+                const puzzle_response = await fetch(`http://127.0.0.1:8000/users/users/${uid}/get_puzzle/`,{
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${getCookie("auth")}`,
+                    }
+                });
+                const data = await puzzle_response.json();
+                const puzzleId = data[0].id;
+                const response = await fetch(`http://localhost:8000/canvas/daily-puzzles/${puzzleId}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Token ${getCookie("auth")}`,
+                    },
+                    body: formData
+                });
+                const result = await response.jsom
+                console.log("Upload successful:", result);
+            } catch (error) {
+                console.error("Error uploading image:", error);
             }
-        } catch (err) {
-            setError('Prompt failed to load.');
-            console.error(err);
-        }
+        }, "image/png");
     };
 
-
-    const saveDrawing = async (e) => {
-        setImage(canvasRef.current.toDataURL('image/png'));
-        e.preventDefault();
-        setError("");
-        console.clear();
-        try {
-            const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    image,
-                }),
-            });
-    
-            if (response.ok) {
-                const responseData = await response.json();
-                responseData.message ? setError(responseData.message): setError(responseData.error);
-                responseData.message ? console.log(responseData.message) : console.log(responseData.error);
-            
-            } else {
-                throw new Error('Submission failed.');
-            }
-        } catch (err) {
-            setError('Submission failed.');
-            console.error(err);
-        }
-    };
     return (
         <div className='flex flex-col items-center min-h-screen pt-6'>
             {canvasData && <Typography variant='h4' align='center'>"{canvasData[0]?.prompt}"</Typography>}
