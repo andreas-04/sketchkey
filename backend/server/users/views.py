@@ -8,13 +8,23 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from .serializers import UserRegistrationSerializer, LoginSerializer
+from canvas.serializers import DailyPuzzleSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import logout
+from canvas.models import DailyPuzzle
+from rest_framework.decorators import action
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
+
+    @action(detail=True, methods=['get'])
+    def get_puzzle(self, request, pk=None):
+        user = self.get_object()
+        puzzles = DailyPuzzle.objects.filter(user=user)
+        serializer = DailyPuzzleSerializer(puzzles, many=True)
+        return Response(serializer.data)
 
 class UserRegistrationView(APIView):
     permission_classes = [AllowAny]
@@ -33,17 +43,11 @@ class UserRegistrationView(APIView):
             response = Response({
                 "message": "User registered successfully.",
                 "token": token.key,
-                "sessionid": request.session.session_key
+                "sessionid": request.session.session_key,
+
             }, status=status.HTTP_201_CREATED)
 
-            # Set user_id as a cookie
-            response.set_cookie(
-                key="user_id",
-                value=user.id,
-                httponly=False,  
-                samesite="Lax",  
-                max_age=60*60*24*7 
-            )
+
 
             return response
     
@@ -67,17 +71,19 @@ class LoginView(APIView):
                 response = Response({
                             "message": "Login successful",
                             "token": token.key,
-                            "sessionid": request.session.session_key
+                            "sessionid": request.session.session_key,
+                            "user_id": user.id
                         }, status=status.HTTP_200_OK)
 
-                # Set user_id as a cookie
-                response.set_cookie(
-                    key="user_id",
-                    value=user.id,
-                    httponly=True,  # Prevents JavaScript access
-                    samesite="Lax",  # Modify as needed
-                    max_age=60*60*24*7  # 1 week expiration
-                )
+                # # Set user_id as a cookie
+                # response.set_cookie(
+                #     key="user_id",
+                #     value=user.id,
+                #     httponly=False, 
+                #     samesite="None",  # Modify as needed
+                #     max_age=60*60*24*7 ,
+                #     secure=False, # 1 week expiration
+                # )
 
                 return response
 
