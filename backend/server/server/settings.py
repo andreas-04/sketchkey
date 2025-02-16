@@ -30,7 +30,13 @@ ALLOWED_HOSTS = []
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8084",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8084",
+]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -41,6 +47,8 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    'withcredentials',
+    
 ]
 
 CORS_ALLOW_METHODS = [
