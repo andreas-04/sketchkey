@@ -73,7 +73,7 @@ jobs:
       - name: Test BACKEND
         run: |
           sleep 10
-          curl -f http://127.0.0.1:8000/user_api || exit 1
+          if [ $(curl -o /dev/null -s -w "%{http_code}\n" http://127.0.0.1:8000/users/) -ne 401 ]; then exit 1; fi
 
       # Tag image
       - name: Tag image
@@ -88,6 +88,6 @@ jobs:
           IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
           docker push $IMAGE_TAG
 
-      
 
-    
+
+
