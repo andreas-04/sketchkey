@@ -5,17 +5,13 @@ from django.utils import timezone
 # Create your models here.
 class DailyPuzzle(models.Model):
     user = models.ForeignKey('users.UserProfile', on_delete=models.CASCADE)
-    canvas = models.FileField(upload_to='puzzles/', blank=True, null=True)
-    prompt = models.CharField(max_length = 256, blank=True)
-    
-    try :
-        response = requests.post("prompt/")
-        if response.status_code == 200:
-            prompt = response.json()[0]
-    except Exception as e:
-        print(f"Error generating prompt: {e}")
-    
-    date = models.DateField(default=timezone.now)  
+    canvas = models.FileField(upload_to='puzzles/',blank=True)
+    prompt = models.CharField(max_length=255)
+    date = models.DateField(auto_now_add=True)
+    elo_rating = models.FloatField(default=1000.0)
+    match_count = models.IntegerField(default=0)
+    last_compared = models.DateTimeField(null=True)
+
     def __str__(self):
             return f"DailyPuzzle for {self.user} on {self.date}"
     
@@ -36,3 +32,9 @@ class DailyPuzzle(models.Model):
         super().save(*args, **kwargs)  
 
 
+class Comparison(models.Model):
+    user = models.ForeignKey('users.UserProfile', on_delete=models.CASCADE)
+    shown_puzzles = models.ManyToManyField(DailyPuzzle, related_name='comparisons_shown')
+    selected_puzzle = models.ForeignKey(DailyPuzzle, on_delete=models.CASCADE, related_name='comparisons_won')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    processed = models.BooleanField(default=False)
