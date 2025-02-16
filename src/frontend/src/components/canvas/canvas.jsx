@@ -276,7 +276,7 @@ const Canvas = ({ themes, themeToggle }) => {
         link.href = dataURL; 
         link.download = 'drawing.png'; 
         link.click(); // Trigger the download
-        handledDialogOpen()
+        
 
     };
     // const saveDrawing = () => {
@@ -333,6 +333,7 @@ const Canvas = ({ themes, themeToggle }) => {
                 console.error("Error uploading image:", error);
             }
         }, "image/png");
+        handledDialogOpen()
     };
 
     return (

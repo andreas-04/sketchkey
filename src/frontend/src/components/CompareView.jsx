@@ -4,13 +4,20 @@ import { Button, Grid, Typography, CircularProgress, Box, Dialog } from "@mui/ma
 function getCookie(name) {
   const cookies = document.cookie.split("; ");
   for (let cookie of cookies) {
-      const [key, value] = cookie.split("=");
-      if (key === name) {
-          return decodeURIComponent(value);
-      }
+    const [key, value] = cookie.split("=");
+    if (key === name) {
+      return decodeURIComponent(value);
+    }
   }
   return null;
 }
+
+const locations = [
+  "http://localhost:8000/puzzles/9-2025-02-16_wJudQxI.png",
+  "http://localhost:8000/puzzles/11-2025-02-16_hCKSMBu.png",
+  "http://localhost:8000/puzzles/12-2025-02-16_agjN6gU.png",
+  
+];
 
 function ComparisonView({ open, handleClose }) {
   const [comparisonOptions, setComparisonOptions] = useState([]);
@@ -86,43 +93,57 @@ function ComparisonView({ open, handleClose }) {
   }
 
   return (
-    <Dialog maxWidth="lg" open={open} onClose={handleClose}>
+    <Dialog maxWidth="xl" open={open} onClose={handleClose}>
       <Box height="sm" sx={{ p: 3 }}>
         <Typography variant="h2" align="center">Pick Your Favorite!</Typography>
         <Grid container spacing={2} justifyContent="center" sx={{ p: 2 }}>
-          {comparisonOptions.map((puzzle) => (
-            <Grid item key={puzzle.id} xs={12} sm={6} md={4}>
-              <Button
-                variant="contained"
-                onClick={() => handleSelect(puzzle.id)}
-                style={{
-                  backgroundImage: `url(${puzzle.canvas})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  width: "300px",
-                  height: "300px",
-                  borderRadius: "8px",
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                  color: "white",
-                  textTransform: "none",
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography
-                  variant="h6"
+          {comparisonOptions.map((puzzle, index) => {
+            const imageUrl = locations[index % locations.length]; // Loop through locations if needed
+            return (
+              <Grid item key={puzzle.id} xs={12} sm={6} md={4}>
+                <Button
+                  variant="contained"
+                  onClick={() => handleSelect(puzzle.id)}
                   style={{
-                    padding: "8px",
-                    borderRadius: "4px",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",  // Optional: Add background for better visibility
+                    width: "430px",
+                    height: "350px",
+                    borderRadius: "8px",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+                    color: "white",
+                    textTransform: "none",
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "center",
+                    position: "relative"
                   }}
                 >
-                  {puzzle.prompt}
-                </Typography>
-              </Button>
-            </Grid>
-          ))}
+                  <img
+                    src={imageUrl}  // Directly using the URL for the image
+                    alt={puzzle.prompt}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "8px"
+                    }}
+                  />
+                  {/* <Typography
+                    variant="h6"
+                    style={{
+                      padding: "8px",
+                      borderRadius: "4px",
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",  // Optional: Add background for better visibility
+                      position: "absolute",
+                      bottom: "8px",
+                      left: "8px"
+                    }}
+                  >
+                    {puzzle.prompt}
+                  </Typography> */}
+                </Button>
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
     </Dialog>

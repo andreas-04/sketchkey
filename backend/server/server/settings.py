@@ -16,6 +16,14 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+import os
+
+# Add this to serve media files during development
+MEDIA_URL = '/puzzles/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'puzzles')
+
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
