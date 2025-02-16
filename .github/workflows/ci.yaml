@@ -1,0 +1,93 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up AWS CLI
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # Log in to AWS ECR
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+      # Build FRONTEND image
+      - name: Build the Docker image
+        run: |
+          docker build -t sketchkey-frontend ./src/frontend
+
+      # Run FRONTEND container
+      - name: Run FRONTEND container
+        run: |
+          docker run -d -p 8084:8084 --name sketchkey-frontend sketchkey-frontend:latest
+     
+      # Make GET request to FRONTEND
+      - name: Test FRONTEND
+        run: |
+          sleep 10
+          curl -f http://localhost:8084 || exit 1
+
+      # Tag image
+      - name: Tag image
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-frontend:latest
+          docker tag sketchkey-frontend:latest $IMAGE_TAG
+
+      # Push image to ECR
+      - name: Push Docker image to Amazon ECR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-frontend:latest
+          docker push $IMAGE_TAG
+
+      # Build BACKEND image
+      - name: Build the Docker image
+        run: |
+          docker build -t sketchkey-backend ./backend
+
+      # Run BACKEND container
+      - name: Run BACKEND container
+        run: |
+          docker run -d -p 8000:8000 --name sketchkey-backend sketchkey-backend:latest
+
+      # Make GET request to BACKEND
+      - name: Test BACKEND
+        run: |
+          sleep 10
+          curl -f http://127.0.0.1:8000/user_api || exit 1
+
+      # Tag image
+      - name: Tag image
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
+          docker tag sketchkey-backend:latest $IMAGE_TAG
+
+      # Push image to ECR
+      - name: Push Docker image to Amazon ECR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
+          docker push $IMAGE_TAG
+
+      
+
+    
