@@ -73,7 +73,6 @@ function ComparisonView ({open, handleClose}) {
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
-  console.log(comparisonOptions.forEach((e)=> console.log(e.canvas)))
   return (
     <Dialog maxWidth="lg"  open={open} onClose={handleClose}>
     <Box height="sm" sx={{p:3,}} >

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Button, Grid, Box, Slider} from '@mui/material';
+import { Button, Grid, Box, Slider, Typography} from '@mui/material';
 import theme from '../../themes/themes';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -13,6 +13,16 @@ const colors = [
          '#B0E0E6','#FF8C00', 
         '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000'
 ];
+function getCookie(name) {
+    const cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key === name) {
+            return decodeURIComponent(value);
+        }
+    }
+    return null; // Return null if the cookie is not found
+  }
 
 const Canvas = ({ themes }) => {
     const [image, setImage] = useState(null);
@@ -27,6 +37,7 @@ const Canvas = ({ themes }) => {
     const [brushSize, setBrushSize] = useState(10); 
     const [currentTool, setCurrentTool] = useState('brush'); 
     const [CompareDialog, SetCompareDialog] = useState(false);
+    const [canvasData , setCanvasData] = useState(null)
     const handledDialogOpen = () => SetCompareDialog(true);
     const handleDialogClose = () => SetCompareDialog(false);
     // fixes redo adding two drawings each time
@@ -36,6 +47,48 @@ const Canvas = ({ themes }) => {
     }, [history, redoHistory]);
 
     useEffect(() => {
+        const uid = getCookie("uid")
+        fetch(`http://127.0.0.1:8000/users/users/${uid}/get_puzzle/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${getCookie("auth")}`,
+            }
+        }).then((response) => response.json()).then((data) =>{
+            console.log(data)
+            setCanvasData(data)
+        }).catch((error) => {
+            console.log(error, "errror getting puzzle, trying to create")
+            const date = new Date();
+            const formattedDate = date.toLocaleDateString('en-CA');
+            fetch(`http://localhost:8000/canvas/daily-puzzles`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${getCookie("auth")}`,
+                },
+                body: JSON.stringify({
+                    user_id: uid,
+                    date: formattedDate,
+                })
+
+            }).then((response) => response.json()).then((data) => {
+                console.log(data);
+                fetch(`http://127.0.0.1:8000/users/users/${uid}/get_puzzle/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${getCookie("auth")}`,
+                    }
+                }).then((response) => response.json()).then((data) => {
+                    setCanvasData(data)
+                })
+            }).catch((error) => {
+                console.log(error, "errror creating puzzle")
+            })
+        })
+
+
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
 
@@ -210,14 +263,12 @@ const Canvas = ({ themes }) => {
             console.error(err);
         }
     };
-    
     return (
         <div className='flex flex-col items-center min-h-screen pt-6'>
+                        {canvasData && <Typography variant='h4' align='center'>"{canvasData[0].prompt}"</Typography>}
+
             <div className='grid grid-cols-2 gap-4 justify-center items-center'>
 
-            <Button variant="contained" color="primary" onClick={getPrompt} style={{ marginTop: '' }}>
-                Get Prompt
-            </Button>
             <p>{error}</p>
             </div>
             {/* Color selection buttons */}
