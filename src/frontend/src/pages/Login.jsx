@@ -2,6 +2,7 @@ import React, { useState } from 'react'; // Add useState here
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 function Login ({themes, themeToggle}) {
     const [username, setUsername] = React.useState('');
@@ -51,8 +52,10 @@ function Login ({themes, themeToggle}) {
     return (
         <>
         <div className='min-h-screen flex items-center justify-center flex flex-col gap-4'>
-        <h1>SketchKey</h1>
-            <p className='text-2xl'>Login</p>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 4 }}>
+            <img src="../../public/sk.png" alt="Register" style={{ maxWidth: '40%', height: 'auto' }} />
+        </Box>
+            {/* <p className='text-2xl'>Login</p> */}
             <div className='flex-col flex gap-4'>
             <TextField variant="standard" label="Username" 
                 value={username} onChange={(e) => setUsername(e.target.value)}/>
