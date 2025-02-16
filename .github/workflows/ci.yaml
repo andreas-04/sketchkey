@@ -44,7 +44,7 @@ jobs:
       # Push image to ECR
       - name: Push Docker image to Amazon ECR
         run: |
-          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-frontend:latest
           docker push $IMAGE_TAG
 
       # Build BACKEND image
