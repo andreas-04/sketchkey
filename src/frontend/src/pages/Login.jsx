@@ -1,11 +1,13 @@
 import React, { useState } from 'react'; // Add useState here
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 function Login ({themes, themeToggle}) {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -27,7 +29,8 @@ function Login ({themes, themeToggle}) {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
                 responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
-            
+                location.replace(location.href)
+                navigate('/canvas');
             } else {
                 throw new Error('Login failed.');
             }
