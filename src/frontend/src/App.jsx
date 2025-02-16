@@ -5,10 +5,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/navbar';
 import Gallery from './pages/Gallery';
-import React, { useState } from 'react';
+import Rank from './pages/Rank'
+
+import { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Switch from '@mui/material/Switch';
 
 import theme from './themes/themes';
 
@@ -37,11 +38,14 @@ function App() {
     { title: 'Register', path: '/register', element: <Register /> },
     { title: 'Login', path: '/', element: <Login /> },
     { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+    { title: 'Rank', path: '/rank', element: <Rank /> },
+   
 ];
 
 const appBarHeader = [
   { title: 'Canvas', path: '/canvas', element: <Home /> },
-  { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+  { title: 'Gallery', path: '/gallery', element: <Gallery /> }, 
+  { title: 'Rank', path: '/rank', element: <Rank /> },
 ];
 
   return (
