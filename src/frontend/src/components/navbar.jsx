@@ -75,44 +75,34 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                 </div>
                 <div>
                 {user ? (
-                            <>
-                            <IconButton onClick={handleAvatarClick}>
-                        <Avatar />
-                    </IconButton>
-                    <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handlePopoverClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                    >
-                        {user ? (
-                            <>
-                                <Typography sx={{ p: 2 }}>Hi!</Typography>
-                                <Button onClick={onSignOutClick}>Sign Out</Button>
+                    <>
+                        <IconButton onClick={handleAvatarClick}>
+                            <Avatar />
+                        </IconButton>
+                        <Popover
+                            id={id}
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={handlePopoverClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <Typography sx={{ p: 2 }}>Hi!</Typography>
+                            <Button onClick={onSignOutClick}>Sign Out</Button>
+                        </Popover>
                             </>
                         ) : (
                             <>
                                 <Button onClick={onSignInClick}>Sign In</Button>
                                 <Button onClick={onSignUpClick}>Sign Up</Button>
-                            </>
-                        )}
-                    </Popover>
-                            </>
-                        ) : (
-                            <>
-                            <Button onClick={onSignInClick}>Sign In</Button>
-                            <Button onClick={onSignUpClick}>Sign Up</Button>
-                            </>
-                        )}
-                 
+                         </>
+                )}
                 </div>  
             </Toolbar>
         </AppBar>
