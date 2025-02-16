@@ -41,11 +41,17 @@ function App() {
     {title: 'Rank', path: '/rank', element: <ComparisonView/>}
 ];
 
+const appBarHeader = [
+  { title: 'Canvas', path: '/canvas', element: <Home /> },
+  { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+  {title: 'Rank', path: '/rank', element: <ComparisonView/>}
+];
+
   return (
     <ThemeProvider theme={themes ? theme[0] : theme[1]}>
       <CssBaseline />
       <Router>
-        <Navbar theme = {themes ? theme[0] : theme[1] } themeToggle={handleThemeChange} navLinks={navLinks}/>
+        <Navbar theme = {themes ? theme[0] : theme[1] } themeToggle={handleThemeChange} navLinks={appBarHeader}/>
         <ScrollToTop /> 
         <Routes>
           {navLinks.map((link) => (
