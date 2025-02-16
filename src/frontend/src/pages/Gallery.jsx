@@ -13,9 +13,6 @@ function Gallery({themes, themeToggle}) {
           </div>
         </div>
         <Pagination count={10} />
-        <Pagination count={10} color="primary" />
-        <Pagination count={10} color="secondary" />
-        <Pagination count={10} disabled />
       </div>
 
     </>

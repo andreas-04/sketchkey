@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Button, Grid, Box, Slider} from '@mui/material';
+import { Button, Box, Slider, Switch} from '@mui/material';
 import theme from '../../themes/themes';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -14,7 +14,7 @@ const colors = [
         '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000'
 ];
 
-const Canvas = ({ themes }) => {
+const Canvas = ({ themes, themeToggle }) => {
     const [image, setImage] = useState(null);
     const canvasRef = useRef(null);
     const [drawing, setDrawing] = useState(false);
@@ -25,7 +25,31 @@ const Canvas = ({ themes }) => {
     const redoHistoryRef = useRef(redoHistory);  
     const [currentColor, setCurrentColor] = useState(colors[0]); 
     const [brushSize, setBrushSize] = useState(10); 
-    const [currentTool, setCurrentTool] = useState('brush'); 
+
+    var currentTheme = themes ? theme[0] : theme[1];
+    // useEffect(() => {
+    //     // currentTheme = themes ? theme[0] : theme[1];
+    //     // if (canvasRef.current) {
+    //     //     currentTheme .current.style.backgroundColor = currentTheme.palette.background.default;
+    //     // }
+    // }, [themes, themeToggle]);
+    const [canvasSize, setCanvasSize] = useState({
+        width: window.innerWidth / 2,
+        height: window.innerHeight / 1.5
+    });
+    useEffect(() => {
+        const updateCanvasSize = () => {
+            setCanvasSize({
+                width: window.innerWidth / 2,
+                height: window.innerHeight / 1.5
+            });
+        };
+    
+        window.addEventListener('resize', updateCanvasSize);
+        return () => window.removeEventListener('resize', updateCanvasSize);
+    }, []);
+
+    // const [currentTool, setCurrentTool] = useState('brush'); 
     const [CompareDialog, SetCompareDialog] = useState(false);
     const handledDialogOpen = () => SetCompareDialog(true);
     const handleDialogClose = () => SetCompareDialog(false);
@@ -40,8 +64,8 @@ const Canvas = ({ themes }) => {
         const ctx = canvas.getContext('2d');
 
         const updateCanvas = () => {
-            canvas.width = window.innerWidth / 2;
-            canvas.height = window.innerHeight / 1.5;
+            canvas.width = canvasSize.width;
+            canvas.height = canvasSize.height;
 
             // Set background color based on theme
             ctx.fillStyle = themes ? theme[0].palette.background.default : theme[1].palette.background.default;
@@ -148,27 +172,139 @@ const Canvas = ({ themes }) => {
         handledDialogOpen()
 
     };
+    // const saveDrawing = () => {
+    //     const canvas = canvasRef.toDataURL('image/png');
+    //     const name = `drawing_${Date.now()}.png`;
+    // }
+    const [error, setError] = useState('');
 
+    function getCookie(name) {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split("=");
+            if (key === name) {
+                return decodeURIComponent(value);
+            }
+        }
+    };
+
+    const getSessionId = () => {
+        const sessionId = getCookie('sessionid');
+        return sessionId;
+    };
+
+
+    const getPrompt = async () => {
+        const sessionId = getSessionId();
+        try {
+            const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sessionId,
+                }),
+            });
+     
+            if (response.ok) {
+                const responseData = await response.json();
+                setError(responseData.prompt);
+                
+            } else {
+                throw new Error('Prompt failed to load.');
+            }
+        } catch (err) {
+            setError('Prompt failed to load.');
+            console.error(err);
+        }
+    };
+
+
+    const saveDrawing = async (e) => {
+        setImage(canvasRef.current.toDataURL('image/png'));
+        e.preventDefault();
+        setError("");
+        console.clear();
+        try {
+            const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image,
+                }),
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                responseData.message ? setError(responseData.message): setError(responseData.error);
+                responseData.message ? console.log(responseData.message) : console.log(responseData.error);
+            
+            } else {
+                throw new Error('Submission failed.');
+            }
+        } catch (err) {
+            setError('Submission failed.');
+            console.error(err);
+        }
+    };
+    
     return (
-        <div className='flex flex-col items-center '>
+        <div className='flex flex-col items-center min-h-screen pt-6'>
+            <div className='grid grid-cols-2 gap-4 justify-center items-center'>
+            <Button variant="contained"
+            // sx={{
+            //         backgroundColor: currentTheme.palette.background.default, // Dynamically set background color
+            //         marginTop: '', // Adjusted for spacing
+            //         '&:hover': {
+            //             backgroundColor: currentTheme.palette.text.secondary, // Darker shade on hover
+            //         },
+            //     }}
+                 color='primary' onClick={getPrompt} style={{ marginTop: '' }}>
+                Get Prompt
+            </Button>
+            <p>{error}</p>
+            </div>
             {/* Color selection buttons */}
-            <div className='grid grid-cols-12 pb-2 pl-2' style={{ position: '', marginLeft: 'auto', marginRight: 'auto', width: '100%', left: '', top: '0' }}>
+            <div className='flex flex-col items-center justify-center'>
+            <div className='grid grid-cols-12 pb-2 pl-2' style={{ position: '', overflow: 'hidden', alignItems: 'center', justifyContent: 'center', overflowX: 'hidden', marginLeft: 'auto', marginRight: 'auto', width: '100%', left: '', top: '0' }}>
                 {colors.map((color) => (
-                    <Grid item key={color} className=''>
-                        <Button className=''
-                            style={{ backgroundColor: color, width: '10px', height: '30px', paddingTop: '', margin: '0 auto'}}
+                    <div key={color} className="pt-2">
+                        <Button
+                            style={{
+                                backgroundColor: color,
+                                width: '30px', // Adjusted width for better visibility
+                                height: '30px',
+                                margin: '0 5px', // Adds horizontal space between buttons
+                            }}
                             onClick={() => handleColorChange(color)}
                         />
-                    </Grid>
+                    </div>
                 ))}
             </div>
+            <div className="flex space-x-2">
+                <p>Size:</p>
+                <Slider
+                    value={brushSize}
+                    onChange={handleBrushChange}
+                    min={1}
+                    max={50}
+                    step={1}
+                    aria-labelledby="brush-size-slider"
+                    style={{ width: '200px' }}
+                />
+                </div>
+                </div>
             <div className="grid grid-cols-2" style={{ display: 'flex', alignItems: '', justifyContent: '' }}>
 
                 <div className='' style={{position: '', width: '100%', left: '', top: '0' }}>
                 <canvas         
                     ref={canvasRef}
-                    width={window.innerWidth / 2}
-                    height={window.innerHeight / 1.5}
+                    width={canvasSize.width}
+                    height={canvasSize.height}
                     onMouseDown={() => setDrawing(true)}
                     onMouseUp={stopDrawing}
                     onMouseMove={draw}
@@ -188,25 +324,14 @@ const Canvas = ({ themes }) => {
                 </div>
             </div>
 
-
         {/* Side action buttons */}
-        <div className='flex flex-col mx-auto'>
-
-            {/* Brush size slider */}
-            <div>
-                <Slider
-                    value={brushSize}
-                    onChange={handleBrushChange}
-                    aria-labelledby="brush-size-slider"
-                    valueLabelDisplay="auto"
-                    min={1}
-                    max={10}
-                />
-            </div>
-
+        <div className='flex flex-col mx-auto grid grid-cols-2 gap-4'>
             {/* Download button */}
             <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '10px' }}>
                 Download Image
+            </Button>
+            <Button variant="contained" color="primary" onClick={saveDrawing} style={{ marginTop: '10px' }}>
+                Submit Image
             </Button>
             <ComparisonView open = {CompareDialog} handleClose={handleDialogClose}/>
             </div>

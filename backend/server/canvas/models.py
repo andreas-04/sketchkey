@@ -11,6 +11,8 @@ class DailyPuzzle(models.Model):
     elo_rating = models.FloatField(default=1000.0)
     match_count = models.IntegerField(default=0)
     last_compared = models.DateTimeField(null=True)
+    
+    
 
     def __str__(self):
             return f"DailyPuzzle for {self.user} on {self.date}"
