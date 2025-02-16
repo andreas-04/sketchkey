@@ -25,16 +25,29 @@ const Canvas = ({ themes, themeToggle }) => {
     const redoHistoryRef = useRef(redoHistory);  
     const [currentColor, setCurrentColor] = useState(colors[0]); 
     const [brushSize, setBrushSize] = useState(10); 
-    var widthCanvas = window.innerWidth / 1.7;
-    var heightCanvas = window.innerHeight / 1.5;
 
     var currentTheme = themes ? theme[0] : theme[1];
+    // useEffect(() => {
+    //     // currentTheme = themes ? theme[0] : theme[1];
+    //     // if (canvasRef.current) {
+    //     //     currentTheme .current.style.backgroundColor = currentTheme.palette.background.default;
+    //     // }
+    // }, [themes, themeToggle]);
+    const [canvasSize, setCanvasSize] = useState({
+        width: window.innerWidth / 2,
+        height: window.innerHeight / 1.5
+    });
     useEffect(() => {
-        currentTheme = themes ? theme[0] : theme[1];
-        if (canvasRef.current) {
-            canvasRef.current.style.backgroundColor = currentTheme.palette.background.default;
-        }
-    }, [themes, themeToggle]);
+        const updateCanvasSize = () => {
+            setCanvasSize({
+                width: window.innerWidth / 2,
+                height: window.innerHeight / 1.5
+            });
+        };
+    
+        window.addEventListener('resize', updateCanvasSize);
+        return () => window.removeEventListener('resize', updateCanvasSize);
+    }, []);
 
     // const [currentTool, setCurrentTool] = useState('brush'); 
     const [CompareDialog, SetCompareDialog] = useState(false);
@@ -51,10 +64,8 @@ const Canvas = ({ themes, themeToggle }) => {
         const ctx = canvas.getContext('2d');
 
         const updateCanvas = () => {
-            widthCanvas = window.innerWidth / 1.7;
-            heightCanvas = window.innerHeight / 1.5;
-            canvas.width = widthCanvas;
-            canvas.height = heightCanvas;
+            canvas.width = canvasSize.width;
+            canvas.height = canvasSize.height;
 
             // Set background color based on theme
             ctx.fillStyle = themes ? theme[0].palette.background.default : theme[1].palette.background.default;
@@ -182,9 +193,9 @@ const Canvas = ({ themes, themeToggle }) => {
         return sessionId;
     };
 
-    const sessionId = getSessionId();
 
     const getPrompt = async () => {
+        const sessionId = getSessionId();
         try {
             const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
                 method: 'POST',
@@ -244,7 +255,6 @@ const Canvas = ({ themes, themeToggle }) => {
     return (
         <div className='flex flex-col items-center min-h-screen pt-6'>
             <div className='grid grid-cols-2 gap-4 justify-center items-center'>
-
             <Button variant="contained"
             // sx={{
             //         backgroundColor: currentTheme.palette.background.default, // Dynamically set background color
@@ -259,23 +269,42 @@ const Canvas = ({ themes, themeToggle }) => {
             <p>{error}</p>
             </div>
             {/* Color selection buttons */}
-            <div className='grid grid-cols-12 pb-2 pl-2' style={{ position: '', marginLeft: 'auto', marginRight: 'auto', width: '100%', left: '', top: '0' }}>
+            <div className='flex flex-col items-center justify-center'>
+            <div className='grid grid-cols-12 pb-2 pl-2' style={{ position: '', overflow: 'hidden', alignItems: 'center', justifyContent: 'center', overflowX: 'hidden', marginLeft: 'auto', marginRight: 'auto', width: '100%', left: '', top: '0' }}>
                 {colors.map((color) => (
-                    <Grid item key={color} className=''>
-                        <Button className=''
-                            style={{ backgroundColor: color, width: '10px', height: '30px', paddingTop: '', margin: '0 auto'}}
+                    <div key={color} className="pt-2">
+                        <Button
+                            style={{
+                                backgroundColor: color,
+                                width: '30px', // Adjusted width for better visibility
+                                height: '30px',
+                                margin: '0 5px', // Adds horizontal space between buttons
+                            }}
                             onClick={() => handleColorChange(color)}
                         />
-                    </Grid>
+                    </div>
                 ))}
             </div>
+            <div className="flex space-x-2">
+                <p>Size:</p>
+                <Slider
+                    value={brushSize}
+                    onChange={handleBrushChange}
+                    min={1}
+                    max={50}
+                    step={1}
+                    aria-labelledby="brush-size-slider"
+                    style={{ width: '200px' }}
+                />
+                </div>
+                </div>
             <div className="grid grid-cols-2" style={{ display: 'flex', alignItems: '', justifyContent: '' }}>
 
                 <div className='' style={{position: '', width: '100%', left: '', top: '0' }}>
                 <canvas         
                     ref={canvasRef}
-                    width={window.innerWidth / 2}
-                    height={window.innerHeight / 1.5}
+                    width={canvasSize.width}
+                    height={canvasSize.height}
                     onMouseDown={() => setDrawing(true)}
                     onMouseUp={stopDrawing}
                     onMouseMove={draw}
@@ -294,7 +323,6 @@ const Canvas = ({ themes, themeToggle }) => {
                     </IconButton>
                 </div>
             </div>
-
 
         {/* Side action buttons */}
         <div className='flex flex-col mx-auto grid grid-cols-2 gap-4'>

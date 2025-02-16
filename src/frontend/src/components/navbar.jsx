@@ -53,8 +53,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         {/* Navbar for Desktop */}
         <AppBar position ="static" color='primary' sx={{ backgroundColor: '', 
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <AppBar position ="static" color='primary' sx={{ backgroundColor: '', 
-            display: 'flex', justifyContent: 'center', alignItems: 'center'}}>            <Toolbar>
+            <Toolbar>
                 <IconButton>
                     <MenuIcon onClick={handleDrawer} />
                 </IconButton>
@@ -76,10 +75,6 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                         '& .MuiSwitch-track': {
                         backgroundColor: themes ? theme[0].palette.background.default: theme[1].palette.background.default,},
                         }} />
-                </div>
-                        '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
-                        '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
-                    }} />
                 </div>
                 <div>
                 {user ? (
@@ -107,8 +102,8 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                             </>
                         ) : (
                             <>
-                                <Button onClick={onSignInClick}>Sign In</Button>
-                                <Button onClick={onSignUpClick}>Sign Up</Button>
+                                <Button color='' onClick={onSignInClick}>Sign In</Button>
+                                <Button color='' onClick={onSignUpClick}>Sign Up</Button>
                          </>
                 )}
                 </div>  
