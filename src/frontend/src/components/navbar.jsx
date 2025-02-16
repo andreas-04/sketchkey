@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Switch, AppBar, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Avatar, Popover, Typography, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useTheme } from '@mui/material/styles'; // Import to access theme
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Switch, AppBar, Toolbar, Button, IconButton, Avatar, Popover, Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Cookies from 'js-cookie';
-// import jwtDecode from 'jwt-decode';
 import theme from '../themes/themes'; 
 
-const Navbar = ({ themes, themeToggle, navLinks }) => {
-    const [mobile, setMobile] = useState(false);
+const Navbar = ({ themes, themeToggle}) => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [user, setUser] = useState(null);
     const navigate = useNavigate();
     var currentTheme = useTheme();
-    
-    const handleDrawer = () => {
-        setMobile(!mobile);
-    };
 
     const handleAvatarClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -28,7 +20,6 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
 
     const onSignOutClick = () => {
         Cookies.remove('auth');
-        setUser(null);
         navigate("/");
         location.replace(location.href)
     };
@@ -41,14 +32,6 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         navigate("/rank")
     }
 
-
-    useEffect(() => {
-        const authCookie = Cookies.get('auth');
-        if (authCookie) {
-                setUser(authCookie);
-        }
-    }, []);
-
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -57,18 +40,13 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     }
 
     return (
-        <>
-        {/* Navbar for Desktop */}
         <AppBar position ="static" color='' sx={{ color: currentTheme.palette.text.buttons, backgroundColor: currentTheme.palette.button.default, 
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div className='hidden md:flex'>
-                <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
+                <Button sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }} onClick={onLogoClick}>    <Box sx={{ width: '100%', display: 'flex', justifyContent: '', mb: 1 }}>
                    <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
-                </Box>
-
-
-
+                </Box></Button>
                 </div>
 
                 <div>
@@ -112,24 +90,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                 <MenuIcon />
             </IconButton>
             </Toolbar>
-            
         </AppBar>
-
-        {/* Navbar for Mobile */}
-        <div className='md:hidden'>
-        <Drawer anchor="left" open={mobile} onClose={handleDrawer} sx={{ '& .MuiDrawer-paper': { width: 250 } }}>
-            <List>
-                {navLinks.map((item) => (
-                    <ListItem key={item.title} disablePadding>
-                        <ListItemButton component={Link} to={item.path} onClick={handleDrawer}>
-                            <ListItemText primary={item.title} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Drawer>
-        </div>
-        </>
     );
 }
 
