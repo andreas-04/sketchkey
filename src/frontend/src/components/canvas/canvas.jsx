@@ -332,7 +332,7 @@ const Canvas = ({ themes, themeToggle }) => {
     };
     return (
         <div className='flex flex-col items-center min-h-screen pt-6'>
-                        {canvasData && <Typography variant='h4' align='center'>"{canvasData[0].prompt}"</Typography>}
+            {canvasData && <Typography variant='h4' align='center'>"{canvasData[0]?.prompt}"</Typography>}
 
             <div className='grid grid-cols-2 gap-4 justify-center items-center'>
 
