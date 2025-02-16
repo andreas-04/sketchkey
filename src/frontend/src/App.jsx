@@ -42,7 +42,6 @@ function App() {
 const appBarHeader = [
   { title: 'Canvas', path: '/canvas', element: <Home /> },
   { title: 'Gallery', path: '/gallery', element: <Gallery /> },
-  {title: 'Rank', path: '/rank', element: <ComparisonView/>}
 ];
 
   return (
