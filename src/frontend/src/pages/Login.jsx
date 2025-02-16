@@ -25,7 +25,7 @@ function Login () {
             if (response.ok) {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
-                responseData.message ? console.log(responseData.message) : console.log(responseData.error);
+                responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
             
             } else {
                 throw new Error('Login failed.');

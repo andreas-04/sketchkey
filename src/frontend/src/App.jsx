@@ -5,7 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/navbar';
 import Gallery from './pages/Gallery';
-
+import ComparisonView from './components/CompareView.jsx';
 import React, { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -38,6 +38,7 @@ function App() {
     { title: 'Register', path: '/register', element: <Register /> },
     { title: 'Login', path: '/', element: <Login /> },
     { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+    {title: 'Rank', path: '/rank', element: <ComparisonView/>}
 ];
 
   return (
