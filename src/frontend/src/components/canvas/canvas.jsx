@@ -152,7 +152,7 @@ const Canvas = ({ themes }) => {
     };
 
     return (
-        <div className='flex flex-col items-center min-h-screen '>
+        <div className='flex flex-col items-center min-h-screen pt-6'>
             {/* Color selection buttons */}
             <div className='grid grid-cols-12 pb-2 pl-2' style={{ alignItems: 'center', justifyContent: 'space-between', position: '', overflowX: 'hidden', marginLeft: 'auto', marginRight: 'auto', width: '80%', left: '', top: '0' }}>
             {colors.map((color) => (
