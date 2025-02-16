@@ -50,7 +50,7 @@ function Register ({themes, themeToggle}) {
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 4 }}>
             <img src="../../public/sk.png" alt="Register" style={{ maxWidth: '40%', height: 'auto' }} />
         </Box>
-            <p className='text-2xl'>Register</p>
+            <p className='text-2xl'>Sign Up</p>
             <div className='flex-col flex gap-4'>
             <TextField variant="standard" label="Username" 
                 value={username} onChange={(e) => setUsername(e.target.value)}/>
