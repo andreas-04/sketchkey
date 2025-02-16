@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import Canvas from '../components/canvas/canvas'
+import theme from '../themes/themes'
 
-function Home() {
+function Home({themes, themeToggle}) {
 
   return (
     <>
       <div className='top-div flex items-center justify-center'>
         <div>
           <div className='max-w[1000px] mx-auto'>
-            <Canvas></Canvas>
+            <Canvas theme = {themes}> </Canvas>
           </div>
         </div>
       </div>
