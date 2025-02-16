@@ -11,7 +11,8 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-
+    var currentTheme = themes ? theme[0] : theme[1];
+    
     const handleDrawer = () => {
         setMobile(!mobile);
     };
@@ -57,31 +58,36 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     return (
         <>
         {/* Navbar for Desktop */}
-        <AppBar position="static" sx={{ backgroundColor: '#c45555', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <AppBar position ="static" color='' sx={{ color: themes ? theme[1].palette.text.primary : theme[0].palette.text.primary, backgroundColor: themes ? theme[0].palette.button.default : theme[1].palette.button.default, 
+            display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                {/* <IconButton> */}
-                    {/* <MenuIcon onClick={handleDrawer} /> */}
-                {/* </IconButton> */}
-                <Box sx={{ width: '10%', display: 'flex', justifyContent: 'center', mb: 1 }}>
-                <Button 
-                onClick={onLogoClick} 
-                >
-                <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
-                </Button>
-                   
+                <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
+                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
                 </Box>
-                <div className="hidden md:flex">
+                <div className="hidden md:flex" >
                     {navLinks.map((item) => (
                         <Button key={item.title} component={Link} to={item.path} color="inherit" sx={{ mx: 1 }}>
                             {item.title}
                         </Button>
                     ))}
                 </div>
-               
+                <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+                    <Switch
+                    
+                    checked={themes} onChange={themeToggle} sx={{
+                        '& .MuiSwitch-thumb': 
+                        { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.background.default, },
+                        '& .MuiSwitch-track': {
+                        backgroundColor: themes ? theme[0].palette.text.primary: theme[1].palette.text.primary,},
+                        }} />
+                </div>
                 <div>
 
                     <>
-                        <IconButton onClick={handleAvatarClick}>
+                        <IconButton   sx={{
+
+                        }}
+                        color='' onClick={handleAvatarClick}>
                             <Avatar />
                         </IconButton>
                         <Popover
