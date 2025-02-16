@@ -86,9 +86,9 @@ const Navbar = ({ themes, themeToggle}) => {
                             </>
                        
                 </div>  
-                <IconButton color="inherit" edge="right" sx={{ display: { md: 'none' }, mr: 2 }} onClick={handleDrawer}>
+                {/* <IconButton color="inherit" edge="right" sx={{ display: { md: 'none' }, mr: 2 }} onClick={handleDrawer}>
                 <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             </Toolbar>
         </AppBar>
     );
