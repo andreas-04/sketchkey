@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Switch, AppBar, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Avatar, Popover, Typography } from '@mui/material';
+import { Switch, AppBar, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Avatar, Popover, Typography, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Cookies from 'js-cookie';
 // import jwtDecode from 'jwt-decode';
@@ -24,18 +24,11 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         setAnchorEl(null);
     };
 
-    const onSignInClick = () => {
-        navigate("/");
-    };
-
-    const onSignUpClick = () => {
-        navigate("/register");
-    };
-
     const onSignOutClick = () => {
         Cookies.remove('auth');
         setUser(null);
         navigate("/");
+        location.replace(location.href)
     };
 
     useEffect(() => {
@@ -51,16 +44,14 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     return (
         <>
         {/* Navbar for Desktop */}
-        <AppBar position ="static" color='primary' sx={{ backgroundColor: '', 
-            display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Toolbar>
+        <AppBar position="static" sx={{ backgroundColor: '#c45555', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <IconButton>
                     <MenuIcon onClick={handleDrawer} />
                 </IconButton>
-                {/* Logo */}
-                {/* <Typography variant="h6" sx={{ fontWeight: 'bold' }}>sketchkey</Typography> */}
-
-                {/* nav */}
+                <Box sx={{ width: '10%', display: 'flex', justifyContent: 'center', mb: 1 }}>
+                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
+                </Box>
                 <div className="hidden md:flex">
                     {navLinks.map((item) => (
                         <Button key={item.title} component={Link} to={item.path} color="inherit" sx={{ mx: 1 }}>
@@ -68,16 +59,9 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                         </Button>
                     ))}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
-                    <Switch checked={themes} onChange={themeToggle} sx={{
-                        '& .MuiSwitch-thumb': 
-                        { backgroundColor: themes ? theme[0].palette.background.default : theme[1].palette.background.default, },
-                        '& .MuiSwitch-track': {
-                        backgroundColor: themes ? theme[0].palette.background.default: theme[1].palette.background.default,},
-                        }} />
-                </div>
+               
                 <div>
-                {user ? (
+
                     <>
                         <IconButton onClick={handleAvatarClick}>
                             <Avatar />
@@ -96,16 +80,16 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                                 horizontal: 'center',
                             }}
                         >
-                            <Typography sx={{ p: 2 }}>Hi!</Typography>
+                         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+                    <Switch checked={themes} onChange={themeToggle} sx={{
+                        '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
+                        '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
+                    }} />
+                </div>
                             <Button onClick={onSignOutClick}>Sign Out</Button>
                         </Popover>
                             </>
-                        ) : (
-                            <>
-                                <Button color='' onClick={onSignInClick}>Sign In</Button>
-                                <Button color='' onClick={onSignUpClick}>Sign Up</Button>
-                         </>
-                )}
+                       
                 </div>  
             </Toolbar>
         </AppBar>

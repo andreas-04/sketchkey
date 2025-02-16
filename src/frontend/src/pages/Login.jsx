@@ -2,12 +2,17 @@ import React, { useState } from 'react'; // Add useState here
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 function Login ({themes, themeToggle}) {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    const handleSignUp = () => {
+        navigate("/register")
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -29,8 +34,10 @@ function Login ({themes, themeToggle}) {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
                 responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
+
+                navigate('/rank');
+
                 location.replace(location.href)
-                navigate('/canvas');
             } else {
                 throw new Error('Login failed.');
             }
@@ -45,7 +52,10 @@ function Login ({themes, themeToggle}) {
     return (
         <>
         <div className='min-h-screen flex items-center justify-center flex flex-col gap-4'>
-            <p className='text-2xl'>Login</p>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 4 }}>
+            <img src="../../public/sk.png" alt="Register" style={{ maxWidth: '40%', height: 'auto' }} />
+        </Box>
+            {/* <p className='text-2xl'>Login</p> */}
             <div className='flex-col flex gap-4'>
             <TextField variant="standard" label="Username" 
                 value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -54,6 +64,7 @@ function Login ({themes, themeToggle}) {
             </div>
 
             <Button sx={{paddingTop: ''}} variant="outlined" onClick={handleLogin}>Login</Button>
+            <Button sx={{paddingTop: ''}} variant="outlined" onClick={handleSignUp}>Sign Up</Button>
             <p className=''>{error}</p>
         </div>
         </>
