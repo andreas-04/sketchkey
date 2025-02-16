@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Switch, AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { CenterFocusStrong } from '@mui/icons-material';
+import theme from '../themes/themes'; 
 
 const Navbar = ({themes, themeToggle, navLinks}) => {
     // const [nav, setNav] = useState(false);
@@ -16,7 +17,8 @@ const Navbar = ({themes, themeToggle, navLinks}) => {
     return (
         <>
         {/* Navbar for Desktop */}
-        <AppBar position ="static" sx={{ backgroundColor: '#c45555' }}>
+        <AppBar position ="static" sx={{ backgroundColor: '#c45555', 
+            display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar>
                 <IconButton>
                     <MenuIcon onClick={handleDrawer} />
@@ -44,7 +46,12 @@ const Navbar = ({themes, themeToggle, navLinks}) => {
                     ))}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
-                <Switch checked={themes} onChange={themeToggle} />
+                    <Switch checked={themes} onChange={themeToggle} sx={{
+                        '& .MuiSwitch-thumb': 
+                        { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary, },
+                        '& .MuiSwitch-track': {
+                        backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary,},
+                        }} />
                 </div>
             </Toolbar>
             </AppBar>
