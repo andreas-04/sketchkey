@@ -73,7 +73,7 @@ jobs:
       - name: Test BACKEND
         run: |
           sleep 10
-          curl -f http://127.0.0.1:8000 || exit 1
+          curl -f http://127.0.0.1:8000/user_api || exit 1
 
       # Tag image
       - name: Tag image
