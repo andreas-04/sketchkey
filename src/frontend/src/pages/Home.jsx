@@ -9,7 +9,7 @@ function Home({themes, themeToggle}) {
       <div className='top-div flex items-center justify-center'>
         <div>
           <div className='max-w[1000px] mx-auto'>
-            <Canvas theme = {themes}> </Canvas>
+            <Canvas theme = {themes, themeToggle}> </Canvas>
           </div>
         </div>
       </div>
