@@ -158,6 +158,7 @@ const Canvas = ({ themes }) => {
     const [error, setError] = useState('');
 
     const getPrompt = async () => {
+        setId(5);
         try {
             const response = await fetch('http://localhost:8000/canvas/daily-puzzles/', {
                 method: 'POST',
@@ -194,8 +195,7 @@ const Canvas = ({ themes }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username,
-                    password,
+                    image,
                 }),
             });
     
