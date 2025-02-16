@@ -1,4 +1,4 @@
-import {createTheme } from '@mui/material/styles';
+import {createTheme} from '@mui/material/styles';
 
 
 const themes = [
@@ -21,6 +21,7 @@ const themes = [
         },
       },
     }),
+    
     createTheme({
       palette: {
         mode: 'light', // Enables light mode
