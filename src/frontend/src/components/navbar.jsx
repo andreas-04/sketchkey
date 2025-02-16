@@ -98,15 +98,15 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                                 horizontal: 'center',
                             }}
                         >
-                         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
-                    <Switch checked={themes} onChange={themeToggle} sx={{
-                        '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
-                        '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
-                    }} />
-                </div>
-                          <Button onClick={onGallaryClick}>Gallary</Button>
-                            <Button onClick={onRankClick}>Rank</Button>
-                            <Button onClick={onSignOutClick}>Sign Out</Button>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+                                <Switch checked={themes} onChange={themeToggle} sx={{
+                                    '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
+                                    '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
+                                }} />
+                                <Button onClick={onGallaryClick}>Gallary</Button>
+                                <Button onClick={onRankClick}>Rank</Button>
+                                <Button onClick={onSignOutClick}>Sign Out</Button>
+                            </Box>
                         </Popover>
                             </>
                        
