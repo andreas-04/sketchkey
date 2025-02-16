@@ -11,7 +11,7 @@ const colors = [
         '#FF5733', '#33FF57', '#3357FF', '#F33FFF', '#FFD700', '#800080', '#00FF00', '#00FFFF', '#FF1493',
         '#4682B4', '#DC143C', '#00BFFF', '#FF4500', '#8A2BE2',
          '#B0E0E6','#FF8C00', 
-        '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000'
+        '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000', '#ffffff'
 ];
 function getCookie(name) {
     const cookies = document.cookie.split("; ");
