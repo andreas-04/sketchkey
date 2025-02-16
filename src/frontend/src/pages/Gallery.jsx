@@ -6,7 +6,7 @@ function Gallery({themes, themeToggle}) {
 
   return (
     <>
-      <div className='top-div flex items-center justify-center'>
+      <div className='top-div flex items-center justify-center min-h-screen'>
         <div>
           <div className='max-w[1000px] mx-auto'>
             

@@ -61,30 +61,20 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         <AppBar position ="static" color='' sx={{ color: themes ? theme[1].palette.text.primary : theme[0].palette.text.primary, backgroundColor: themes ? theme[0].palette.button.default : theme[1].palette.button.default, 
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div className='hidden md:flex'>
                 <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
                    <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
                 </Box>
-                {/* <div className="hidden md:flex" >
-                    {navLinks.map((item) => (
-                        <Button key={item.title} component={Link} to={item.path} color="inherit" sx={{ mx: 1 }}>
-                            {item.title}
-                        </Button>
-                    ))}
-                </div> */}
-                {/* <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
-                    <Switch
-                    
-                    checked={themes} onChange={themeToggle} sx={{
-                        '& .MuiSwitch-thumb': 
-                        { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.background.default, },
-                        '& .MuiSwitch-track': {
-                        backgroundColor: themes ? theme[0].palette.text.primary: theme[1].palette.text.primary,},
-                        }} />
-                </div> */}
+
+
+
+                </div>
+
                 <div>
+                    
 
                     <>
-                        <IconButton   sx={{
+                        <IconButton sx={{
 
                         }}
                         color='' onClick={handleAvatarClick}>
@@ -117,10 +107,15 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                             </>
                        
                 </div>  
+                <IconButton color="inherit" edge="right" sx={{ display: { md: 'none' }, mr: 2 }} onClick={handleDrawer}>
+                <MenuIcon />
+            </IconButton>
             </Toolbar>
+            
         </AppBar>
 
         {/* Navbar for Mobile */}
+        <div className='md:hidden'>
         <Drawer anchor="left" open={mobile} onClose={handleDrawer} sx={{ '& .MuiDrawer-paper': { width: 250 } }}>
             <List>
                 {navLinks.map((item) => (
@@ -132,6 +127,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                 ))}
             </List>
         </Drawer>
+        </div>
         </>
     );
 }
