@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Switch, AppBar, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Avatar, Popover, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import Cookies from 'js-cookie';
+// import jwtDecode from 'jwt-decode';
 import theme from '../themes/themes'; 
 
 const Navbar = ({ themes, themeToggle, navLinks }) => {
     const [mobile, setMobile] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     const handleDrawer = () => {
@@ -30,12 +33,17 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     };
 
     const onSignOutClick = () => {
-        // delete the cookie
-    }
+        Cookies.remove('auth');
+        setUser(null);
+        navigate("/");
+    };
 
     useEffect(() => {
-        // fetch the cookie here called auth
-    }, [])
+        const authCookie = Cookies.get('auth');
+        if (authCookie) {
+                setUser(authCookie);
+        }
+    }, []);
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -66,7 +74,9 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                     }} />
                 </div>
                 <div>
-                    <IconButton onClick={handleAvatarClick}>
+                {user ? (
+                            <>
+                            <IconButton onClick={handleAvatarClick}>
                         <Avatar />
                     </IconButton>
                     <Popover
@@ -83,11 +93,26 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                             horizontal: 'center',
                         }}
                     >
-                        <Typography sx={{ p: 2 }}>User Information Coming</Typography>
-                        <Button onClick={onSignInClick}>Sign In</Button>
-                        <Button onClick={onSignUpClick}>Sign Up</Button>
-                        <Button onClick={onSignOutClick} >Sign Out</Button>
+                        {user ? (
+                            <>
+                                <Typography sx={{ p: 2 }}>Hi!</Typography>
+                                <Button onClick={onSignOutClick}>Sign Out</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button onClick={onSignInClick}>Sign In</Button>
+                                <Button onClick={onSignUpClick}>Sign Up</Button>
+                            </>
+                        )}
                     </Popover>
+                            </>
+                        ) : (
+                            <>
+                            <Button onClick={onSignInClick}>Sign In</Button>
+                            <Button onClick={onSignUpClick}>Sign Up</Button>
+                            </>
+                        )}
+                 
                 </div>  
             </Toolbar>
         </AppBar>
