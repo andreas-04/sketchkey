@@ -56,6 +56,7 @@ const Canvas = ({ themes }) => {
                 ctx.fillStyle = color; // Use the color of the point
                 ctx.fillRect(x, y, 2, 2);
             });
+            setImage(canvas.toDataURL('image/png'));
         };
 
         updateCanvas();
@@ -129,7 +130,6 @@ const Canvas = ({ themes }) => {
         const canvas = canvasRef.current;
         const dataURL = canvas.toDataURL('image/png'); // Capture the canvas as a PNG image
         const link = document.createElement('a'); 
-        setImage(dataURL);
         link.href = dataURL; 
         link.download = 'drawing.png'; 
         link.click(); // Trigger the download
