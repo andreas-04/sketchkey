@@ -4,6 +4,10 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 
+const setCock = (response) => {
+    document.cookie = `auth=${response.token}; path=/; Secure; SameSite=Lax`;
+    document.cookie = `uid=${response.user_id}; path=/; Secure; SameSite=Lax`;
+}
 function Login ({themes, themeToggle}) {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -33,10 +37,8 @@ function Login ({themes, themeToggle}) {
             if (response.ok) {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
-                responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
-
-                navigate('/rank');
-
+                responseData.message ? setCock(responseData) : console.log(responseData.error);
+                navigate('/canvas');
                 location.replace(location.href)
             } else {
                 throw new Error('Login failed.');
