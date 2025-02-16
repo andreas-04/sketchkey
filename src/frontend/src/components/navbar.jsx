@@ -70,7 +70,7 @@ const Navbar = ({ themes, themeToggle}) => {
                                 '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
                                 '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
                             }} />
-                            <Button onClick={onGallaryClick}>Gallary</Button>
+                            <Button onClick={onGallaryClick}>Gallery</Button>
                             <Button onClick={onRankClick}>Rank</Button>
                             <Button onClick={onSignOutClick}>Sign Out</Button>
                         </Box>

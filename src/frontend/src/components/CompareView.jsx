@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Grid, Typography, CircularProgress, Box, Dialog } from "@mui/material";
 
 function getCookie(name) {
@@ -9,7 +9,7 @@ function getCookie(name) {
           return decodeURIComponent(value);
       }
   }
-  return null; // Return null if the cookie is not found
+  return null;
 }
 
 function ComparisonView({ open, handleClose }) {

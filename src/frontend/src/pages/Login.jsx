@@ -8,7 +8,7 @@ const setCock = (response) => {
     document.cookie = `auth=${response.token}; path=/; Secure; SameSite=Lax`;
     document.cookie = `uid=${response.user_id}; path=/; Secure; SameSite=Lax`;
 }
-function Login ({themes, themeToggle}) {
+function Login () {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [error, setError] = useState('');
@@ -48,8 +48,6 @@ function Login ({themes, themeToggle}) {
             console.error(err);
         }
     };
-
-
 
     return (
         <>
