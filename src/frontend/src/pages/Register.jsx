@@ -6,13 +6,14 @@ function Register () {
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [error, setError] = useState('');
+    const [confirm_password, setPasswordConfirm] = React.useState('');
 
+    const [error, setError] = useState('');
     const handleRegister = async (e) => {
         e.preventDefault();
-
+        setError("");
         try {
-            const response = await fetch('http://localhost:8084/register/', {
+            const response = await fetch('http://localhost:8000/users/register/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -21,14 +22,16 @@ function Register () {
                     username,
                     email,
                     password,
+                    confirm_password,
                 }),
             });
     
             if (response.ok) {
-                // Handle successful registration
-                console.log('User registered successfully');
+                const responseData = await response.json();
+                responseData.message ? setError(responseData.message): setError(responseData.error);
+                responseData.message ? console.log(responseData.message) : console.log(responseData.error);
+                
             } else {
-                // Handle failed registration
                 throw new Error('Registration failed.');
             }
         } catch (err) {
@@ -50,7 +53,10 @@ function Register () {
                 value={email} onChange={(e) => setEmail(e.target.value)}/>
             <TextField variant="standard" label="Password" type="password" 
                 value={password} onChange={(e) => setPassword(e.target.value)} />
+            <TextField variant="standard" label="Confirm Password" type="password" 
+                value={confirm_password} onChange={(e) => setPasswordConfirm(e.target.value)} />
             </div>
+
 
             <Button sx={{paddingTop: ''}} variant="outlined" onClick={handleRegister}>Register</Button>
             <p>{error}</p>
