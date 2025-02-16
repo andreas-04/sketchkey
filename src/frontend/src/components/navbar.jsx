@@ -32,6 +32,15 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         location.replace(location.href)
     };
 
+    const onGallaryClick = () => {
+        navigate("/gallary")
+    }
+
+    const onRankClick = () => {
+        navigate("/rank")
+    }
+
+
     useEffect(() => {
         const authCookie = Cookies.get('auth');
         if (authCookie) {
@@ -41,6 +50,10 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+
+    const onLogoClick = () => {
+        navigate('/canvas')
+    }
 
     return (
         <>
@@ -52,20 +65,11 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                 <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
                    <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
                 </Box>
+
+
+
                 </div>
 
-                <div className='md:hidden'>
-                <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
-                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '250%', height: 'auto' }} />
-                </Box>
-                </div>
-                <div className="hidden md:flex" >
-                    {navLinks.map((item) => (
-                        <Button key={item.title} component={Link} to={item.path} color="inherit" sx={{ mx: 1 }}>
-                            {item.title}
-                        </Button>
-                    ))}
-                </div>
                 <div>
                     
 
@@ -90,13 +94,15 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                                 horizontal: 'center',
                             }}
                         >
-                         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
-                    <Switch checked={themes} onChange={themeToggle} sx={{
-                        '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
-                        '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
-                    }} />
-                </div>
-                            <Button onClick={onSignOutClick}>Sign Out</Button>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+                                <Switch checked={themes} onChange={themeToggle} sx={{
+                                    '& .MuiSwitch-thumb': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
+                                    '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
+                                }} />
+                                <Button onClick={onGallaryClick}>Gallary</Button>
+                                <Button onClick={onRankClick}>Rank</Button>
+                                <Button onClick={onSignOutClick}>Sign Out</Button>
+                            </Box>
                         </Popover>
                             </>
                        
