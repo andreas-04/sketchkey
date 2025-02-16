@@ -35,6 +35,17 @@ jobs:
         run: |
           docker build -t sketchkey-frontend ./src/frontend
 
+      # Run FRONTEND container
+      - name: Run FRONTEND container
+        run: |
+          docker run -d -p 8084:8084 --name sketchkey-frontend sketchkey-frontend:latest
+     
+      # Make GET request to FRONTEND
+      - name: Test FRONTEND
+        run: |
+          sleep 10
+          curl -f http://localhost:8084 || exit 1
+
       # Tag image
       - name: Tag image
         run: |
@@ -53,6 +64,17 @@ jobs:
         run: |
           docker build -t sketchkey-backend ./backend
 
+      # Run BACKEND container
+      - name: Run BACKEND container
+        run: |
+          docker run -d -p 8000:8000 --name sketchkey-backend sketchkey-backend:latest
+
+      # Make GET request to BACKEND
+      - name: Test BACKEND
+        run: |
+          sleep 10
+          curl -f http://127.0.0.1:8000 || exit 1
+
       # Tag image
       - name: Tag image
         run: |
@@ -65,3 +87,7 @@ jobs:
         run: |
           IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
           docker push $IMAGE_TAG
+
+      
+
+    
