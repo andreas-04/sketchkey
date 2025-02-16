@@ -2,11 +2,11 @@ name: Build and Push Image
 
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - '*'
   pull_request:
-    # branches:
-    #   - main
+    branches:
+      - '*'
 
 jobs:
   build:
@@ -43,6 +43,7 @@ jobs:
 
       # Push image to ECR
       - name: Push Docker image to Amazon ECR
+        if: github.ref == 'refs/heads/main'
         run: |
           IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-frontend:latest
           docker push $IMAGE_TAG
@@ -60,6 +61,7 @@ jobs:
 
       # Push image to ECR
       - name: Push Docker image to Amazon ECR
+        if: github.ref == 'refs/heads/main'
         run: |
           IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
           docker push $IMAGE_TAG
