@@ -53,9 +53,10 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                    <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
                 </Box>
                 </div>
+
                 <div className='md:hidden'>
                 <Box sx={{ width: '10%', display: 'flex', justifyContent: '', mb: 1 }}>
-                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '300%', height: 'auto' }} />
+                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '250%', height: 'auto' }} />
                 </Box>
                 </div>
                 <div className="hidden md:flex" >
