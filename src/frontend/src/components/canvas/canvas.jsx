@@ -5,10 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Undo from '@mui/icons-material/Undo';
 import Redo from '@mui/icons-material/Redo';
+import ComparisonView from '../CompareView';
 
 const colors = [
         '#FF5733', '#33FF57', '#3357FF', '#F33FFF', '#FFD700', '#800080', '#00FF00', '#00FFFF', '#FF1493',
-        '#4682B4', '#DC143C', '#00BFFF',  '#8A2BE2',
+        '#4682B4', '#DC143C', '#00BFFF', '#FF4500', '#8A2BE2',
          '#B0E0E6','#FF8C00', 
         '#FF0000', '#6495ED', '#00008B', '#F0E68C', '#D8BFD8', '#556B2F', '#000000'
 ];
@@ -24,9 +25,10 @@ const Canvas = ({ themes }) => {
     const redoHistoryRef = useRef(redoHistory);  
     const [currentColor, setCurrentColor] = useState(colors[0]); 
     const [brushSize, setBrushSize] = useState(10); 
-    var widthCanvas = window.innerWidth / 1.7;
-    var heightCanvas = window.innerHeight / 1.5;
-
+    const [currentTool, setCurrentTool] = useState('brush'); 
+    const [CompareDialog, SetCompareDialog] = useState(false);
+    const handledDialogOpen = () => SetCompareDialog(true);
+    const handleDialogClose = () => SetCompareDialog(false);
     // fixes redo adding two drawings each time
     useEffect(() => {
         historyRef.current = history;
@@ -38,15 +40,12 @@ const Canvas = ({ themes }) => {
         const ctx = canvas.getContext('2d');
 
         const updateCanvas = () => {
-            widthCanvas = window.innerWidth / 1.7;
-            heightCanvas = window.innerHeight / 1.5;
-            canvas.width = widthCanvas;
-            canvas.height = heightCanvas;
-            const currentTheme = themes ? theme[0] : theme[1];
+            canvas.width = window.innerWidth / 2;
+            canvas.height = window.innerHeight / 1.5;
 
             // Set background color based on theme
-            ctx.fillStyle = currentTheme.palette.background.default;
-            ctx.fillRect(0, 0, widthCanvas, heightCanvas);
+            ctx.fillStyle = themes ? theme[0].palette.background.default : theme[1].palette.background.default;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw history, change fillstyle because previous filled background, this is lines
             history.forEach((path) => {
@@ -70,11 +69,8 @@ const Canvas = ({ themes }) => {
 
         updateCanvas();
         window.addEventListener('resize', updateCanvas);
-        // window.addEventListener('click', updateCanvas);
-        // window.addEventListener('mouseup', stopDrawing);
         return () => {
             window.removeEventListener('resize', updateCanvas);
-            // window.removeEventListener('mouseup', stopDrawing);
         };
     }, [themes, history, currentDrawing]);
 
@@ -149,9 +145,107 @@ const Canvas = ({ themes }) => {
         link.href = dataURL; 
         link.download = 'drawing.png'; 
         link.click(); // Trigger the download
+        handledDialogOpen()
+
     };
 
     return (
+        <div className='flex flex-col items-center '>
+            {/* Color selection buttons */}
+            <div className='grid grid-cols-12 pb-2 pl-2' style={{ position: '', marginLeft: 'auto', marginRight: 'auto', width: '100%', left: '', top: '0' }}>
+                {colors.map((color) => (
+                    <Grid item key={color} className=''>
+                        <Button className=''
+                            style={{ backgroundColor: color, width: '10px', height: '30px', paddingTop: '', margin: '0 auto'}}
+                            onClick={() => handleColorChange(color)}
+                        />
+                    </Grid>
+                ))}
+            </div>
+            <div className="grid grid-cols-2" style={{ display: 'flex', alignItems: '', justifyContent: '' }}>
+
+                <div className='' style={{position: '', width: '100%', left: '', top: '0' }}>
+                <canvas         
+                    ref={canvasRef}
+                    width={window.innerWidth / 2}
+                    height={window.innerHeight / 1.5}
+                    onMouseDown={() => setDrawing(true)}
+                    onMouseUp={stopDrawing}
+                    onMouseMove={draw}
+                    style={{ border: '1px solid blue', marginLeft: 'auto', marginRight: 'auto', maxHeight: '', maxWidth: '' }}
+                />
+                </div>
+                <div className="flex flex-col" style={{ position: 'absolute', paddingLeft: '', padding: '10px' }}>
+                    <IconButton color="primary" onClick={clearCanvas} aria-label="clear">
+                        <DeleteIcon />
+                    </IconButton>
+                    <IconButton color="primary" onClick={undoDrawing} aria-label="undo">
+                        <Undo />
+                    </IconButton>
+                    <IconButton color="primary" onClick={redoDrawing} aria-label="redo">
+                        <Redo />
+                    </IconButton>
+                </div>
+            </div>
+
+
+        {/* Side action buttons */}
+        <div className='flex flex-col mx-auto'>
+
+            {/* Brush size slider */}
+            <div>
+                <Slider
+                    value={brushSize}
+                    onChange={handleBrushChange}
+                    aria-labelledby="brush-size-slider"
+                    valueLabelDisplay="auto"
+                    min={1}
+                    max={10}
+                />
+            </div>
+
+            {/* Download button */}
+            <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '10px' }}>
+                Download Image
+            </Button>
+            <ComparisonView open = {CompareDialog} handleDialogClose={handleDialogClose}/>
+            </div>
+        </div>
+    );
+    // return (
+    //     <div>
+    //         <Grid container spacing={1} style={{ marginTop: '10px',  position: '', width: '70%', left: '', top: '0' }}>
+    //             {colors.map((color) => (
+    //                 <Grid item key={color}>
+    //                     <Button
+    //                         style={{ backgroundColor: color, width: '30px', height: '30px' }}
+    //                         onClick={() => handleColorChange(color)}
+    //                     />
+    //                 </Grid>
+    //             ))}
+    //         </Grid>
+    //         <canvas
+    //             ref={canvasRef}
+    //             width={window.innerWidth / 2}
+    //             height={window.innerHeight / 1.5}
+    //             onMouseDown={() => setDrawing(true)}
+    //             onMouseUp={stopDrawing}
+    //             onMouseMove={draw}
+    //             style={{ border: '1px solid red' }}
+    //         />
+            
+    //         <IconButton onClick={undoDrawing} aria-label="undo">
+    //             <Undo />
+    //         </IconButton>
+    //         <IconButton onClick={clearCanvas} aria-label="delete">
+    //             <DeleteIcon />
+    //         </IconButton>
+    //         <IconButton onClick={redoDrawing} aria-label="delete">
+    //             <Redo />
+    //         </IconButton>
+            
+    //     </div>
+    // );
         <div className='flex flex-col items-center min-h-screen pt-6'>
             {/* Color selection buttons */}
             <div className='grid grid-cols-12 pb-2 pl-2' style={{ alignItems: 'center', justifyContent: 'space-between', position: '', overflowX: 'hidden', marginLeft: 'auto', marginRight: 'auto', width: '80%', left: '', top: '0' }}>
