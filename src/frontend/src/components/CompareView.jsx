@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid2, Typography, CircularProgress,Box } from "@mui/material";
+import { Button, Grid2, Typography, CircularProgress,Box, Dialog } from "@mui/material";
 function getCookie(name) {
   const cookies = document.cookie.split("; ");
   for (let cookie of cookies) {
@@ -10,7 +10,7 @@ function getCookie(name) {
   }
   return null; // Return null if the cookie is not found
 }
-function ComparisonView () {
+function ComparisonView ({open, handleClose}) {
   const [comparisonOptions, setComparisonOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,11 +43,11 @@ function ComparisonView () {
   }, []);
 
   // Handle button click
-  const handleSelect = async(selectedPuzzle) => {
+  const handleSelect = async(selected_puzzle) => {
     const shown_puzzles = comparisonOptions.map(opt => opt.id)
     const data = {
       shown_puzzles,
-      selectedPuzzle,
+      selected_puzzle,
     }
     fetch("http://localhost:8000/canvas/comparison/", {
       method: 'POST',
@@ -60,6 +60,7 @@ function ComparisonView () {
    }).then(response => response.json())
      .then(result => console.log('Success:', result))
      .catch(error => console.error('Error:', error));
+     onClose();
   };
 
   if (loading) {
@@ -71,7 +72,8 @@ function ComparisonView () {
   }
   console.log(comparisonOptions.forEach((e)=> console.log(e.canvas)))
   return (
-    <Box sx={{p:3, height:'100vh'}} >
+    <Dialog maxWidth="lg"  open={open} onClose={handleClose}>
+    <Box height="sm" sx={{p:3,}} >
       <Typography variant="h2" align="center">Pick Your Favorite!</Typography>
 <Grid2 sx={{p:2}}container spacing={2} justifyContent="center">
       {comparisonOptions.map((puzzle) => (
@@ -109,7 +111,7 @@ function ComparisonView () {
       ))}
     </Grid2>
     </Box>
-    
+    </Dialog>
   );
 };
 

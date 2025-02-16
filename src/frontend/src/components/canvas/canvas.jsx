@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Undo from '@mui/icons-material/Undo';
 import Redo from '@mui/icons-material/Redo';
+import ComparisonView from '../CompareView';
 
 const colors = [
         '#FF5733', '#33FF57', '#3357FF', '#F33FFF', '#FFD700', '#800080', '#00FF00', '#00FFFF', '#FF1493',
@@ -25,7 +26,9 @@ const Canvas = ({ themes }) => {
     const [currentColor, setCurrentColor] = useState(colors[0]); 
     const [brushSize, setBrushSize] = useState(10); 
     const [currentTool, setCurrentTool] = useState('brush'); 
-
+    const [CompareDialog, SetCompareDialog] = useState(false);
+    const handledDialogOpen = () => SetCompareDialog(true);
+    const handleDialogClose = () => SetCompareDialog(false);
     // fixes redo adding two drawings each time
     useEffect(() => {
         historyRef.current = history;
@@ -142,6 +145,8 @@ const Canvas = ({ themes }) => {
         link.href = dataURL; 
         link.download = 'drawing.png'; 
         link.click(); // Trigger the download
+        handledDialogOpen()
+
     };
 
     return (
@@ -203,6 +208,7 @@ const Canvas = ({ themes }) => {
             <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '10px' }}>
                 Download Image
             </Button>
+            <ComparisonView open = {CompareDialog} handleDialogClose={handleDialogClose}/>
             </div>
         </div>
     );
