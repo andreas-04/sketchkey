@@ -6,7 +6,6 @@ function Rank() {
   const [rank, setRank] = useState(null);
   const [error, setError] = useState('');
 
-
   function getCookie(name) {
     const cookies = document.cookie.split("; ");
     for (let cookie of cookies) {
@@ -49,10 +48,10 @@ function Rank() {
     <>
       <div className='top-div flex items-center justify-center'>
           <div className='max-w[1000px] mx-auto'>
-            <Typography variant="h4" component="h1" gutterBottom>
+            <Typography variant="h4" component="h1" gutterBottom align="center">
               Ranking
             </Typography>
-            {error && <Typography color="error">{error}</Typography>}
+            {error && <Typography color="error" align="center">{error}</Typography>}
             {rank ? (
               <TableContainer component={Paper}>
                 <Table>
@@ -75,7 +74,7 @@ function Rank() {
                 </Table>
               </TableContainer>
             ) : (
-              <Typography>Loading...</Typography>
+              <Typography align="center">Loading...</Typography>
             )}
           </div>
       </div>
