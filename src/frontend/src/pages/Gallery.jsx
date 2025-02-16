@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Pagination from '@mui/material/Pagination';
 
 
-function Home() {
+function Gallery({themes, themeToggle}) {
 
   return (
     <>
@@ -22,4 +22,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Gallery
