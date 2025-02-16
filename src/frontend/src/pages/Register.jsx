@@ -26,7 +26,7 @@ function Register ({themes, themeToggle}) {
                     confirm_password,
                 }),
             });
-    
+     
             if (response.ok) {
                 const responseData = await response.json();
                 responseData.message ? setError(responseData.message): setError(responseData.error);
