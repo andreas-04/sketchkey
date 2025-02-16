@@ -36,13 +36,13 @@ const Canvas = ({ themes, themeToggle }) => {
     const [currentColor, setCurrentColor] = useState(colors[0]); 
     const [brushSize, setBrushSize] = useState(10); 
 
-    var currentTheme = themes ? theme[0] : theme[1];
-    // useEffect(() => {
-    //     // currentTheme = themes ? theme[0] : theme[1];
-    //     // if (canvasRef.current) {
-    //     //     currentTheme .current.style.backgroundColor = currentTheme.palette.background.default;
-    //     // }
-    // }, [themes, themeToggle]);
+    const [currentTheme, setCurrentTheme] = useState(themes ? theme[0] : theme[1]);
+
+    useEffect(() => {
+        // Update the current theme dynamically when theme or themeToggle changes
+        setCurrentTheme(themes ? theme[0] : theme[1]);
+    }, [themes, themeToggle]);
+
     const [canvasSize, setCanvasSize] = useState({
         width: window.innerWidth / 2,
         height: window.innerHeight / 1.5
@@ -64,6 +64,7 @@ const Canvas = ({ themes, themeToggle }) => {
     const [canvasData , setCanvasData] = useState(null)
     const handledDialogOpen = () => SetCompareDialog(true);
     const handleDialogClose = () => SetCompareDialog(false);
+    
     // fixes redo adding two drawings each time
     useEffect(() => {
         historyRef.current = history;
@@ -158,7 +159,24 @@ const Canvas = ({ themes, themeToggle }) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        setCurrentDrawing((prevDrawing) => [...prevDrawing, { x, y, color: currentColor, size: brushSize }]);
+        // setCurrentDrawing((prevDrawing) => [...prevDrawing, { x, y, color: currentColor, size: brushSize }]);
+        setCurrentDrawing((prevDrawing) => {
+            const newDrawing = [...prevDrawing, { x, y, color: currentColor, size: brushSize }];
+            
+            if (newDrawing.length > 1) {
+                const ctx = canvas.getContext('2d');
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = brushSize;
+                ctx.lineJoin = 'round';  // This makes line joints smoother
+                ctx.lineCap = 'round';   // This makes the line ends smooth
+                
+                ctx.beginPath();
+                ctx.moveTo(newDrawing[newDrawing.length - 2].x, newDrawing[newDrawing.length - 2].y); // Move to the last point
+                ctx.lineTo(x, y); // Draw to the new point
+                ctx.stroke();
+            }
+            return newDrawing;
+        });        
     };
 
     const redoDrawing = useCallback(() => {
@@ -329,6 +347,7 @@ const Canvas = ({ themes, themeToggle }) => {
                     </div>
                 ))}
             </div>
+            
             <div className="flex space-x-2">
                 <p>Size:</p>
                 <Slider
@@ -339,6 +358,10 @@ const Canvas = ({ themes, themeToggle }) => {
                     step={1}
                     aria-labelledby="brush-size-slider"
                     style={{ width: '200px' }}
+                    sx={{
+                        width: '200px',
+                        color: currentTheme.palette.button.default,
+                    }}
                 />
                 </div>
                 </div>
@@ -353,16 +376,18 @@ const Canvas = ({ themes, themeToggle }) => {
                     onMouseUp={stopDrawing}
                     onMouseMove={draw}
                     style={{ border: '1px solid blue', marginLeft: 'auto', marginRight: 'auto', maxHeight: '', maxWidth: '' }}
+                    
                 />
                 </div>
                 <div className="flex flex-col" style={{ position: 'absolute', paddingLeft: '', padding: '10px' }}>
-                    <IconButton color="primary" onClick={clearCanvas} aria-label="clear">
+                    <IconButton onClick={clearCanvas} aria-label="clear"
+                    sx={{ color: currentTheme.palette.button.default }}>
                         <DeleteIcon />
                     </IconButton>
-                    <IconButton color="primary" onClick={undoDrawing} aria-label="undo">
+                    <IconButton sx={{ color: currentTheme.palette.button.default }} onClick={undoDrawing} aria-label="undo">
                         <Undo />
                     </IconButton>
-                    <IconButton color="primary" onClick={redoDrawing} aria-label="redo">
+                    <IconButton sx={{ color: currentTheme.palette.button.default }} onClick={redoDrawing} aria-label="redo">
                         <Redo />
                     </IconButton>
                 </div>
@@ -371,10 +396,10 @@ const Canvas = ({ themes, themeToggle }) => {
         {/* Side action buttons */}
         <div className='flex flex-col mx-auto grid grid-cols-2 gap-4'>
             {/* Download button */}
-            <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '10px' }}>
+            <Button variant="contained" sx={{ backgroundColor: currentTheme.palette.button.default }} onClick={handleDownload} style={{ marginTop: '10px' }}>
                 Download Image
             </Button>
-            <Button variant="contained" color="primary" onClick={saveDrawing} style={{ marginTop: '10px' }}>
+            <Button variant="contained" sx={{ backgroundColor: currentTheme.palette.button.default}} onClick={saveDrawing} style={{ marginTop: '10px' }}>
                 Submit Image
             </Button>
             <ComparisonView open = {CompareDialog} handleClose={handleDialogClose}/>

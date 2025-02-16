@@ -9,7 +9,10 @@ const themes = [
           main: '#1976d2', // MUI blue
         },
         secondary: {
-          main: '#dc004e', // MUI pink
+          main: '#c45555', // MUI pink
+        },
+        button: {
+          default: '#c45555',
         },
         background: {
           default: '#121212', // Dark gray (better than pure black for readability)
@@ -30,6 +33,9 @@ const themes = [
         },
         secondary: {
           main: '#dc004e', // MUI pink
+        },
+        button: {
+          default: '#c45555',
         },
         background: {
           default: '#F5F5F5', // Light gray background for a soft look
