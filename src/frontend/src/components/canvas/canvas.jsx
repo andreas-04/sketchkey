@@ -8,6 +8,8 @@ import Redo from '@mui/icons-material/Redo';
 import ComparisonView from '../CompareView';
 import Timeout from '../Timeout';
 
+import { useTheme } from '@mui/material/styles'; // Import to access theme
+
 const colors = [
         '#FF5733', '#33FF57', '#3357FF', '#F33FFF', '#FFD700', '#800080', '#00FF00', '#00FFFF', '#FF1493',
         '#4682B4', '#DC143C', '#00BFFF', '#FF4500', '#8A2BE2',
@@ -44,12 +46,31 @@ const Canvas = ({ themes, themeToggle }) => {
         setTimeoutDialog(true)
     }
 
-    const [currentTheme, setCurrentTheme] = useState(themes ? theme[0] : theme[1]);
+    const themeRef = useRef(null);
+    const currentTheme = useTheme(); // Access the current theme
+  
+    // useEffect(() => {
+    //   const canvas = canvasRef.current;
+    //   const ctx = canvas.getContext('2d');
+  
+    //   if (canvas && ctx) {
+    //     // Example of changing background and object color based on theme
+        // ctx.fillStyle = currentTheme.palette.background.default; // Set background color
+        // ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw background
+  
+    //     ctx.fillStyle = currentTheme.palette.primary.main; // Set object color (example)
+    //     ctx.beginPath();
+    //     ctx.arc(150, 150, 50, 0, 2 * Math.PI);
+    //     ctx.fill(); // Draw a circle with primary color
+    //   }
+    // }, [currentTheme]); // Re-run effect whenever theme changes
 
-    useEffect(() => {
-        // Update the current theme dynamically when theme or themeToggle changes
-        setCurrentTheme(themes ? theme[0] : theme[1]);
-    }, [themes, themeToggle]);
+    // const [currentTheme, setCurrentTheme] = useState(themes ? theme[0] : theme[1]);
+
+    // useEffect(() => {
+    //     // Update the current theme dynamically when theme or themeToggle changes
+    //     setCurrentTheme(themes ? theme[0] : theme[1]);
+    // }, [themes, themeToggle]);
 
     const [canvasSize, setCanvasSize] = useState({
         width: window.innerWidth / 2,
@@ -130,8 +151,11 @@ const Canvas = ({ themes, themeToggle }) => {
             canvas.height = canvasSize.height;
 
             // Set background color based on theme
-            ctx.fillStyle = themes ? theme[0].palette.background.default : theme[1].palette.background.default;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // ctx.fillStyle = themes ? theme[0].palette.background.default : theme[1].palette.background.default;
+            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = currentTheme.palette.background.default; // Set background color
+            ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw background
 
             // Draw history, change fillstyle because previous filled background, this is lines
             history.forEach((path) => {
@@ -158,7 +182,7 @@ const Canvas = ({ themes, themeToggle }) => {
         return () => {
             window.removeEventListener('resize', updateCanvas);
         };
-    }, [themes, history, currentDrawing]);
+    }, [currentTheme, history, currentDrawing]);
 
     const draw = (e) => {
         if (!drawing) return;
@@ -333,8 +357,10 @@ const Canvas = ({ themes, themeToggle }) => {
                 ))}
             </div>
             
-            <div className="flex space-x-2">
-                <p>Size:</p>
+            <div className="flex flex-row gap-2 items-center justify-center">
+                <Typography variant="h6" color="textPrimary">
+                    Size:
+                </Typography>                
                 <Slider
                     value={brushSize}
                     onChange={handleBrushChange}
@@ -360,7 +386,7 @@ const Canvas = ({ themes, themeToggle }) => {
                     onMouseDown={() => setDrawing(true)}
                     onMouseUp={stopDrawing}
                     onMouseMove={draw}
-                    style={{ border: '1px solid black', marginLeft: 'auto', marginRight: 'auto', maxHeight: '', maxWidth: '' }}
+                    style={{ border: '1px solid', borderColor: currentTheme.palette.background.border, marginLeft: 'auto', marginRight: 'auto', maxHeight: '', maxWidth: '' }}
                     
                 />
                 </div>
@@ -381,10 +407,14 @@ const Canvas = ({ themes, themeToggle }) => {
         {/* Side action buttons */}
         <div className='flex flex-col mx-auto grid grid-cols-2 gap-4'>
             {/* Download button */}
-            <Button variant="contained" sx={{ backgroundColor: currentTheme.palette.button.default }} onClick={handleDownload} style={{ marginTop: '10px' }}>
+            <Button variant="contained" sx={{
+                color: currentTheme.palette.text.buttons,
+                backgroundColor: currentTheme.palette.button.default }} onClick={handleDownload} style={{ marginTop: '10px' }}>
                 Download Image
             </Button>
-            <Button variant="contained" sx={{ backgroundColor: currentTheme.palette.button.default}} onClick={saveDrawing} style={{ marginTop: '10px' }}>
+            <Button variant="contained" sx={{
+                color: currentTheme.palette.text.buttons,
+                backgroundColor: currentTheme.palette.button.default}} onClick={saveDrawing} style={{ marginTop: '10px' }}>
                 Submit Image
             </Button>
             <ComparisonView open = {CompareDialog} handleClose={handleDialogClose}/>

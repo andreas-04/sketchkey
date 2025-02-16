@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Switch, AppBar, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Avatar, Popover, Typography, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useTheme } from '@mui/material/styles'; // Import to access theme
 import Cookies from 'js-cookie';
 // import jwtDecode from 'jwt-decode';
 import theme from '../themes/themes'; 
@@ -11,7 +12,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    var currentTheme = themes ? theme[0] : theme[1];
+    var currentTheme = useTheme();
     
     const handleDrawer = () => {
         setMobile(!mobile);
@@ -58,7 +59,7 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     return (
         <>
         {/* Navbar for Desktop */}
-        <AppBar position ="static" color='' sx={{ color: themes ? theme[1].palette.text.primary : theme[0].palette.text.primary, backgroundColor: themes ? theme[0].palette.button.default : theme[1].palette.button.default, 
+        <AppBar position ="static" color='' sx={{ color: currentTheme.palette.text.buttons, backgroundColor: currentTheme.palette.button.default, 
             display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Toolbar sx={{  display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div className='hidden md:flex'>
