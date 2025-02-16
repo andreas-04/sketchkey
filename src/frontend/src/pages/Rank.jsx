@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 
 function Rank() {
   const [rank, setRank] = useState(null);
@@ -37,16 +38,33 @@ function Rank() {
     <>
       <div className='top-div flex items-center justify-center'>
           <div className='max-w[1000px] mx-auto'>
-            <h1>Ranking</h1>
-            {error && <p>{error}</p>}
+            <Typography variant="h4" component="h1" gutterBottom>
+              Ranking
+            </Typography>
+            {error && <Typography color="error">{error}</Typography>}
             {rank ? (
-              <ul>
-                {rank.map((item, index) => (
-                  <li key={index}>{item.name}: {item.score}</li>
-                ))}
-              </ul>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Rank</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Score</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rank.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.score}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             ) : (
-              <p>Loading...</p>
+              <Typography>Loading...</Typography>
             )}
           </div>
       </div>

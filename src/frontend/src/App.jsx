@@ -39,11 +39,13 @@ function App() {
     { title: 'Login', path: '/', element: <Login /> },
     { title: 'Gallery', path: '/gallery', element: <Gallery /> },
     { title: 'Rank', path: '/rank', element: <Rank /> },
+   
 ];
 
 const appBarHeader = [
   { title: 'Canvas', path: '/canvas', element: <Home /> },
-  { title: 'Gallery', path: '/gallery', element: <Gallery /> },
+  { title: 'Gallery', path: '/gallery', element: <Gallery /> }, 
+  { title: 'Rank', path: '/rank', element: <Rank /> },
 ];
 
   return (
