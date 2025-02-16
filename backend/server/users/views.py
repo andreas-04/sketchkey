@@ -29,13 +29,24 @@ class UserRegistrationView(APIView):
             login(request, user)
             
             token = Token.objects.create(user=user)
-            
-            return Response({
+
+            # Create response
+            response = Response({
                 "message": "User registered successfully.",
                 "token": token.key,
                 "sessionid": request.session.session_key
             }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Set user_id as a cookie
+            response.set_cookie(
+                key="user_id",
+                value=user.id,
+                httponly=False,  
+                samesite="Lax",  
+                max_age=60*60*24*7 
+            )
+
+            return response
     
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -54,19 +65,26 @@ class LoginView(APIView):
                 
                 # For API token authentication
                 token, created = Token.objects.get_or_create(user=user)
-                
-                return Response({
-                    'message': 'Login successful',
-                    'token': token.key,
-                    'sessionid': request.session.session_key
-                }, status=status.HTTP_200_OK)
-            return Response(
-                {'error': 'Invalid credentials'},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+                response = Response({
+                            "message": "Login successful",
+                            "token": token.key,
+                            "sessionid": request.session.session_key
+                        }, status=status.HTTP_200_OK)
 
+                # Set user_id as a cookie
+                response.set_cookie(
+                    key="user_id",
+                    value=user.id,
+                    httponly=True,  # Prevents JavaScript access
+                    samesite="Lax",  # Modify as needed
+                    max_age=60*60*24*7  # 1 week expiration
+                )
+
+                return response
+
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class LogoutView(APIView):
     def post(self, request):
         # Delete the token
