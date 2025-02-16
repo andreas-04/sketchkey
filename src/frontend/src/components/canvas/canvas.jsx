@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Undo from '@mui/icons-material/Undo';
 import Redo from '@mui/icons-material/Redo';
 import ComparisonView from '../CompareView';
+import Timeout from '../Timeout';
 
 const colors = [
         '#FF5733', '#33FF57', '#3357FF', '#F33FFF', '#FFD700', '#800080', '#00FF00', '#00FFFF', '#FF1493',
@@ -25,6 +26,13 @@ const Canvas = ({ themes, themeToggle }) => {
     const redoHistoryRef = useRef(redoHistory);  
     const [currentColor, setCurrentColor] = useState(colors[0]); 
     const [brushSize, setBrushSize] = useState(10); 
+    const [timeoutDialog, setTimeoutDialog] = useState(false);
+
+
+    const timeOutFetch = () => {
+        // Coming soon
+        setTimeoutDialog(true)
+    }
 
     var currentTheme = themes ? theme[0] : theme[1];
     // useEffect(() => {
@@ -334,6 +342,7 @@ const Canvas = ({ themes, themeToggle }) => {
                 Submit Image
             </Button>
             <ComparisonView open = {CompareDialog} handleClose={handleDialogClose}/>
+            <Timeout open={timeoutDialog} />
             </div>
         </div>
     );
