@@ -1,0 +1,65 @@
+name: Build and Push Image
+
+on:
+  push:
+    # branches:
+    #   - main
+  pull_request:
+    # branches:
+    #   - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up AWS CLI
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # Log in to AWS ECR
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+      # Build FRONTEND image
+      - name: Build the Docker image
+        run: |
+          docker build -t sketchkey-frontend ./src/frontend
+
+      # Tag image
+      - name: Tag image
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-frontend:latest
+          docker tag sketchkey-frontend:latest $IMAGE_TAG
+
+      # Push image to ECR
+      - name: Push Docker image to Amazon ECR
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
+          docker push $IMAGE_TAG
+
+      # Build BACKEND image
+      - name: Build the Docker image
+        run: |
+          docker build -t sketchkey-backend ./backend
+
+      # Tag image
+      - name: Tag image
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
+          docker tag sketchkey-backend:latest $IMAGE_TAG
+
+      # Push image to ECR
+      - name: Push Docker image to Amazon ECR
+        run: |
+          IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/sketchkey-backend:latest
+          docker push $IMAGE_TAG
