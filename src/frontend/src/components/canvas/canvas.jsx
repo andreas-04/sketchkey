@@ -106,7 +106,24 @@ const Canvas = ({ themes, themeToggle }) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        setCurrentDrawing((prevDrawing) => [...prevDrawing, { x, y, color: currentColor, size: brushSize }]);
+        // setCurrentDrawing((prevDrawing) => [...prevDrawing, { x, y, color: currentColor, size: brushSize }]);
+        setCurrentDrawing((prevDrawing) => {
+            const newDrawing = [...prevDrawing, { x, y, color: currentColor, size: brushSize }];
+            
+            if (newDrawing.length > 1) {
+                const ctx = canvas.getContext('2d');
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = brushSize;
+                ctx.lineJoin = 'round';  // This makes line joints smoother
+                ctx.lineCap = 'round';   // This makes the line ends smooth
+                
+                ctx.beginPath();
+                ctx.moveTo(newDrawing[newDrawing.length - 2].x, newDrawing[newDrawing.length - 2].y); // Move to the last point
+                ctx.lineTo(x, y); // Draw to the new point
+                ctx.stroke();
+            }
+            return newDrawing;
+        });        
     };
 
     const redoDrawing = useCallback(() => {
