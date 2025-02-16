@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserRegistrationSerializer, LoginSerializer
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import logout
-# Create your views here.
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
