@@ -61,8 +61,3 @@ function Register () {
 
 export default Register;
 
-/*
-    path('', include(router.urls)),
-    path('register/', UserRegistrationView.as_view()),
-    path('login/', LoginView.as_view(), name='login'),
-*/
