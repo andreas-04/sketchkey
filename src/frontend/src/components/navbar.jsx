@@ -31,6 +31,15 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
         location.replace(location.href)
     };
 
+    const onGallaryClick = () => {
+        navigate("/gallary")
+    }
+
+    const onRankClick = () => {
+        navigate("/rank")
+    }
+
+
     useEffect(() => {
         const authCookie = Cookies.get('auth');
         if (authCookie) {
@@ -41,6 +50,10 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    const onLogoClick = () => {
+        navigate('/canvas')
+    }
+
     return (
         <>
         {/* Navbar for Desktop */}
@@ -50,7 +63,12 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                     <MenuIcon onClick={handleDrawer} />
                 </IconButton>
                 <Box sx={{ width: '10%', display: 'flex', justifyContent: 'center', mb: 1 }}>
-                   <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
+                <Button 
+                onClick={onLogoClick} 
+                >
+                <img src="../../public/sk_light.png" alt="Register" style={{ maxWidth: '80%', height: 'auto' }} />
+                </Button>
+                   
                 </Box>
                 <div className="hidden md:flex">
                     {navLinks.map((item) => (
@@ -86,6 +104,8 @@ const Navbar = ({ themes, themeToggle, navLinks }) => {
                         '& .MuiSwitch-track': { backgroundColor: themes ? theme[0].palette.text.primary : theme[1].palette.text.primary },
                     }} />
                 </div>
+                          <Button onClick={onGallaryClick}>Gallary</Button>
+                            <Button onClick={onRankClick}>Rank</Button>
                             <Button onClick={onSignOutClick}>Sign Out</Button>
                         </Popover>
                             </>

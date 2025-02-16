@@ -35,7 +35,7 @@ function Login ({themes, themeToggle}) {
                 responseData.message ? setError(responseData.message): setError(responseData.error);
                 responseData.message ? document.cookie = `auth=${responseData.token}; path=/; Secure; SameSite=Lax` : console.log(responseData.error);
 
-                navigate('/rank');
+                navigate('/canvas');
 
                 location.replace(location.href)
             } else {
