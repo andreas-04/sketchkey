@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import Canvas from '../components/canvas/canvas'
+import Pagination from '@mui/material/Pagination';
+
 
 function Home() {
 
@@ -8,9 +9,13 @@ function Home() {
       <div className='top-div flex items-center justify-center'>
         <div>
           <div className='max-w[1000px] mx-auto'>
-            <Canvas></Canvas>
+            
           </div>
         </div>
+        <Pagination count={10} />
+        <Pagination count={10} color="primary" />
+        <Pagination count={10} color="secondary" />
+        <Pagination count={10} disabled />
       </div>
 
     </>
