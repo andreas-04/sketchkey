@@ -2,7 +2,7 @@
 
 ## Description 
 
-> [BLANK] is a web application game to utilize AI in creating images based on a simple prompt. User compete for the best and most creative image. 
+> Sketch Key is a web application game to utilize AI in creating images based on a simple prompt. User compete for the best and most creative image. 
 > Data is recycled into the system.
 
 ## Objective 
