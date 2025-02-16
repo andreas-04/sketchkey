@@ -208,7 +208,7 @@ const Canvas = ({ themes }) => {
             <Button variant="contained" color="primary" onClick={handleDownload} style={{ marginTop: '10px' }}>
                 Download Image
             </Button>
-            <ComparisonView open = {CompareDialog} handleDialogClose={handleDialogClose}/>
+            <ComparisonView open = {CompareDialog} handleClose={handleDialogClose}/>
             </div>
         </div>
     );

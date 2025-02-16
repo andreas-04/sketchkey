@@ -41,7 +41,11 @@ function ComparisonView ({open, handleClose}) {
 
     fetchComparisonOptions();
   }, []);
-
+  const onClose = () => {
+    if (handleClose) {
+      handleClose();
+    }
+  };
   // Handle button click
   const handleSelect = async(selected_puzzle) => {
     const shown_puzzles = comparisonOptions.map(opt => opt.id)
@@ -62,7 +66,6 @@ function ComparisonView ({open, handleClose}) {
      .catch(error => console.error('Error:', error));
      onClose();
   };
-
   if (loading) {
     return <CircularProgress />;
   }
