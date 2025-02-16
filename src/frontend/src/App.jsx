@@ -1,57 +1,17 @@
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import Home from './pages/Home';
-import App2 from './pages/App2';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/navbar';
 import Gallery from './pages/Gallery';
 
 import React, { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Switch from '@mui/material/Switch';
 
-const dark_theme = createTheme({
-  palette: {
-    mode: 'dark', // Enables dark mode
-    primary: {
-      main: '#1976d2', // MUI blue
-    },
-    secondary: {
-      main: '#dc004e', // MUI pink
-    },
-    background: {
-      default: '#121212', // Dark gray (better than pure black for readability)
-      paper: '#1E1E1E', // Slightly lighter for elevated surfaces
-    },
-    text: {
-      primary: '#E0E0E0', // Light gray for better contrast
-      secondary: '#B0B0B0', // Softer gray for less important text
-    },
-  },
-});
-
-const light_theme = createTheme({
-  palette: {
-    mode: 'light', // Enables light mode
-    primary: {
-      main: '#1976d2', // MUI blue
-    },
-    secondary: {
-      main: '#dc004e', // MUI pink
-    },
-    background: {
-      default: '#F5F5F5', // Light gray background for a soft look
-      paper: '#FFFFFF', // Pure white for elevated surfaces (e.g., cards)
-    },
-    text: {
-      primary: '#212121', // Dark gray for primary text
-      secondary: '#616161', // Softer gray for less important text
-    },
-  },
-});
-
+import theme from './themes/themes';
 
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -81,10 +41,10 @@ function App() {
 ];
 
   return (
-    <ThemeProvider theme={themes ? dark_theme : light_theme}>
+    <ThemeProvider theme={themes ? theme[0] : theme[1]}>
       <CssBaseline />
       <Router>
-        <Navbar theme = {themes ? dark_theme : light_theme } themeToggle={handleThemeChange} navLinks={navLinks}/>
+        <Navbar theme = {themes ? theme[0] : theme[1] } themeToggle={handleThemeChange} navLinks={navLinks}/>
         <ScrollToTop /> 
         <Routes>
           {navLinks.map((link) => (
