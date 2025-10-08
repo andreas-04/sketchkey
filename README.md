@@ -28,7 +28,8 @@ to a few sleep deprived hackers, but perhaps not for the reason we intended.
 We created a containerized full stack Django-React app that allowed users to create and submit drawings to be ranked. 
 The algorithim used to rank images is the same algorithim used to rank chess players.
 
-<img width="931" height="704" alt="drawing(45)" src="https://github.com/user-attachments/assets/92b05077-00b6-42fe-82e8-c637720fa157" />
+<img width="931" height="704" alt="drawing(46)" src="https://github.com/user-attachments/assets/d0cdf9cc-cab6-4208-84dd-ebbd8782f176" />
+
 
 # Tools Used
 - React + React Router
