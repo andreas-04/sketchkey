@@ -1,42 +1,40 @@
-# README
+# Sketch Key
 
-## Description 
+Crimson Code 2025 Hackathon Project
 
-> Sketch Key is a web application game to utilize AI in creating images based on a simple prompt. User compete for the best and most creative image. 
-> Data is recycled into the system.
-
-## Objective 
+## Prompt 
 
 Art and Innovation
 
-The art is the images that users create and get cleaned up using AI
+## Objective
 
+The art is the images that users create and get cleaned up using AI
 The innovation is using the images that are created as randomization tools to use in TLS communication. 
 Additionally, the drawings based on the prompt can be a data point that is mined to improve the data used in the image generator or just to be sold (?). 
-    This is based on the idea of capcha to improve image recognition. But this is more creative fuel for AI to learn from.
+This is based on the idea of capcha to improve image recognition. But this is more creative fuel for AI to learn from.
 
 
-# Outline
+### System Outline
 
-- Given a small prompt (no AI used), users compete and draw a creative piece of art and compete against random or non random friends. 
+- Given a random word, users draw a piece of art on a virtual canvas.
+- The images that are created get enhanced using generative AI (who just wants to vote on stick figures). 
+- After the user completes their artwork, they can submit it and choose between 2 pieces of art 
+- Users compete daily, in a wordle style fashion, for the most creative piece of art
 
-- The images that are created get refined using generative AI (who just wants to vote on stick figures). 
-- The images are then voted on (how are these voted? Are users voting for themselves?) and winners are recylced.
-     - Users are going to need to have accounted to store scores or what is the use in playing if not to have a high score. 
+## Final Outcome
 
-## Phase I 
-- Defining the prompt
+Our goals for this project were lofty, but our final product was at least mildly entertaining
+to a few sleep deprived hackers, but perhaps not for the reason we intended.
+We created a containerized full stack Django-React app that allowed users to create and submit drawings to be ranked. 
+The algorithim used to rank images is the same algorithim used to rank chess players.
 
-
-# Demo
 
 # Tools Used
-- React Router (React, Vite, ReactRouter)
-- Django RESTapi framework. 
-- Containerized using docker and 
-
-
-# Future Improvements
-- Developing own AI model to be used
-- Finalizing TLS communication using randomized values from the user. 
-
+- React + React Router
+  - Vite
+  - TailwindCss
+- Django
+  - sqlite
+  - Django-Rest
+- Docker
+  - Github CI/CD
